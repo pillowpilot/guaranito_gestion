@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.management import call_command
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 
 
 class TestCommand(TestCase):
@@ -22,6 +22,24 @@ class TestCommand(TestCase):
 
         qs = Group.objects.filter(name="company_manager")
         self.assertEqual(len(qs), 1)
-        
+
         qs = Group.objects.filter(name="company_user")
         self.assertEqual(len(qs), 1)
+
+    def test_user_perms_not_to_company_user(self):
+        call_command(self.command_name)
+        g = Group.objects.get(name="company_user")
+
+        codenames = ["view_user", "add_user", "change_user"]
+        for codename in codenames:
+            p = Permission.objects.get(codename=codename)
+            self.assertFalse(p in g.permissions.all())
+
+    def test_user_perms_to_company_manager(self):
+        call_command(self.command_name)
+        g = Group.objects.get(name="company_manager")
+
+        codenames = ["view_user", "add_user", "change_user"]
+        for codename in codenames:
+            p = Permission.objects.get(codename=codename)
+            self.assertTrue(p in g.permissions.all())
