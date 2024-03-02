@@ -1,4 +1,7 @@
+import logging
 from rest_framework.permissions import BasePermission, DjangoModelPermissions
+
+logger = logging.getLogger()
 
 class CustomDjangoModelPermissions(DjangoModelPermissions):
     """
@@ -33,3 +36,18 @@ class IsItself(BasePermission):
     
     def has_object_permission(self, request, view, obj):        
         return request.user.id == obj.id
+
+class CreatingAtSameCompany(BasePermission):
+    """
+    Custom permission to deny creation at other companies
+    """
+    def has_permission(self, request, view):
+        if view.action == 'create' and 'company' in request.data.keys():
+            authenticated_user_company_id = request.user.company.id
+            try:
+                to_create_user_company_id = int(request.data['company'])
+            except ValueError:
+                logger.warn(f"Failure to cast request.data['company'] to int at CreatingAtSameCompany")
+                return False
+            return authenticated_user_company_id == to_create_user_company_id
+        return True
