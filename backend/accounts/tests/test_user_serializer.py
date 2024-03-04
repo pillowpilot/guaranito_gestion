@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from accounts.models import Company
 from accounts.serializers import UserSerializer
+from accounts.factories import CompanyFactory
 
 
 class TestUserSerializer(TestCase):
@@ -42,7 +43,7 @@ class TestUserSerializer(TestCase):
             company=company,
         )
         data = UserSerializer(user).data
-        
+
         fields = ["id", "email", "first_name", "last_name", "company"]
 
         # Test there is a one-to-one correspondence between fields and keys
@@ -56,12 +57,14 @@ class TestUserSerializer(TestCase):
         self.assertEqual(data["company"], company.id)
 
     def test_deserialize_user(self):
+        c = CompanyFactory.create()
         native = {
             "id": 1,
             "email": "user@company.com",
             "first_name": "Freddy",
             "last_name": "Mercury",
             "password": "iwanttobreakfree",
+            "company": c.id,
         }
 
         serializer = UserSerializer(data=native)
@@ -74,12 +77,12 @@ class TestUserSerializer(TestCase):
             "first_name": "Freddy",
             "last_name": "Mercury",
             "password": "iwanttobreakfree",
-            "company": 1
+            "company": 1,
         }
 
         serializer = UserSerializer(data=native)
         self.assertFalse(serializer.is_valid())
-        self.assertTrue('company' in serializer.errors.keys())
+        self.assertTrue("company" in serializer.errors.keys())
 
     def test_deserialize_user_with_company(self):
         c = Company.objects.create(name="Company Z")
@@ -90,7 +93,7 @@ class TestUserSerializer(TestCase):
             "first_name": "Freddy",
             "last_name": "Mercury",
             "password": "iwanttobreakfree",
-            "company": c.id
+            "company": c.id,
         }
 
         serializer = UserSerializer(data=native)
@@ -139,3 +142,17 @@ class TestUserSerializer(TestCase):
         serializer.is_valid()
         self.assertFalse("first_name" in serializer.errors.keys())
         self.assertFalse("last_name" in serializer.errors.keys())
+
+    def test_type_error_on_company_field(self):
+        native = {
+            "email": "user@company.com",
+            "first_name": "Freddy",
+            "last_name": "Mercury",
+            "password": "iwanttobreakfree",
+            "company": "asdf",
+        }
+
+        serializer = UserSerializer(data=native)
+        self.assertFalse(serializer.is_valid())
+        self.assertTrue("company" in serializer.errors.keys())
+        self.assertEqual(serializer.errors["company"][0].code, "incorrect_type")

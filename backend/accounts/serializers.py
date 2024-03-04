@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from accounts.models import User
+from accounts.models import User, Company
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -11,6 +11,7 @@ class UserSerializer(serializers.ModelSerializer):
     Print an UserSerializer instance to see its details
     """
     password = serializers.CharField(write_only=True)
+    company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all())
 
     class Meta(object):
         model = User
