@@ -43,3 +43,21 @@ class TestCommand(TestCase):
         for codename in codenames:
             p = Permission.objects.get(codename=codename)
             self.assertTrue(p in g.permissions.all())
+
+    def test_parcel_perms_to_company_manager(self):
+        call_command(self.command_name)
+        g = Group.objects.get(name="company_manager")
+
+        codenames = ["view_parcel", "add_parcel", "change_parcel"]
+        for codename in codenames:
+            p = Permission.objects.get(codename=codename)
+            self.assertTrue(p in g.permissions.all())
+
+    def test_parcel_perms_to_company_user(self):
+        call_command(self.command_name)
+        g = Group.objects.get(name="company_user")
+
+        codenames = ["view_parcel", "add_parcel", "change_parcel"]
+        for codename in codenames:
+            p = Permission.objects.get(codename=codename)
+            self.assertTrue(p in g.permissions.all())
