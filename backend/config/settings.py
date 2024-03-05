@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt', # To use localizations/translations
     'drf_spectacular',
     'accounts',
+    'management',
 ]
 
 MIDDLEWARE = [
