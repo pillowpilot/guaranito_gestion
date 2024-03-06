@@ -1,7 +1,14 @@
 from pathlib import Path
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Read enviromental variables from file
+env = environ.Env()
+envfile = BASE_DIR / ".env"
+assert envfile.exists()
+env.read_env(str(BASE_DIR / ".env"))
 
 
 # Quick-start development settings - unsuitable for production
@@ -32,6 +39,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'accounts',
     'management',
+    's3_storage',
 ]
 
 MIDDLEWARE = [
@@ -137,4 +145,12 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '0.1.0',
     'SERVE_INCLUDE_SCHEMA': False,
     # OTHER SETTINGS
+}
+
+# S3 Storage app config
+S3_STORAGE_SETTINGS = {
+    "REGION": env("REGION"),
+    "BUCKET_NAME": env("BUCKET_NAME"),
+    "AWS_ACCESS_KEY": env("AWS_ACCESS_KEY"),
+    "AWS_SECRET_ACCESS_KEY": env("AWS_SECRET_ACCESS_KEY"),
 }
