@@ -1,5 +1,27 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from accounts.models import User, Company
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Custom JWT Token Obtain Serializer that appends user id to response
+    and into token
+    """
+
+    @classmethod
+    def get_token(cls, user):
+        """Override get_token to append user id to token"""
+        token = super().get_token(user)
+        token["id"] = user.id
+        return token
+
+    def validate(self, attrs):
+        """Add user id into response data after validation"""
+        response_data = super().validate(attrs)
+        response_data["id"] = self.user.id
+        return response_data
+
 
 class UserSerializer(serializers.ModelSerializer):
     """
@@ -10,6 +32,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     Print an UserSerializer instance to see its details
     """
+
     password = serializers.CharField(write_only=True)
     company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all())
 

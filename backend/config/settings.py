@@ -138,6 +138,11 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
+# JWT
+SIMPLE_JWT = {
+    'TOKEN_OBTAIN_SERIALIZER': 'accounts.serializers.CustomTokenObtainPairSerializer',
+}
+
 # DRF Spectacular (OpenAPI)
 SPECTACULAR_SETTINGS = {
     'TITLE': 'Guaranito - Gestion',
