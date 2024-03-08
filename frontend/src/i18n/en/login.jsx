@@ -6,6 +6,10 @@ const t = {
     labels: {
         email: "Email",
         password: "Password",
+    },
+    errors: {
+        requiredPassword: "Password is required",
+        requiredEmail: "Email is required"
     }
 };
 
