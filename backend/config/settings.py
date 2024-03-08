@@ -21,6 +21,7 @@ SECRET_KEY = 'django-insecure-((vu2-r(9e^t-4y79%24b8$c_6ni6-skn9qkd%207v!&bj(&_#
 DEBUG = True
 
 ALLOWED_HOSTS = []
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
 
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'
@@ -34,6 +35,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
     'rest_framework',
     'rest_framework_simplejwt', # To use localizations/translations
     'drf_spectacular',
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
