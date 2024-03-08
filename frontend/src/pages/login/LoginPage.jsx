@@ -1,18 +1,12 @@
 import { useContext, useState } from "react";
-import {
-  Box,
-  Typography,
-  TextField,
-  Stack,
-  Alert,
-  Grid,
-} from "@mui/material";
+import { Box, Typography, TextField, Stack, Alert, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import AuthContext from "../../contexts/AuthProvider";
 import bgImage from "../../assets/orange_field_bg.png";
 import { LoginButton } from "../../components/buttons/LoginButton";
+import { PasswordField } from "../../components/fields/PasswordField";
 
 const LoginRight = ({ errorMsg, onSubmitHandler, register, handleSubmit }) => {
   const { t } = useTranslation();
@@ -35,12 +29,11 @@ const LoginRight = ({ errorMsg, onSubmitHandler, register, handleSubmit }) => {
             required
             {...register("loginEmail")}
           />
-          <TextField
-            type="password"
-            label={t("login.labels.password")}
-            placeholder="Enter your password here"
-            required
-            {...register("loginPassword")}
+          <PasswordField
+            name="loginPassword"
+            labelKey="login.labels.password"
+            requiredKey="login.labels.password"
+            register={register}
           />
           <LoginButton tKey="login.loginBtn" />
           <Stack direction="column" gap={2} justifyContent="space-between">
