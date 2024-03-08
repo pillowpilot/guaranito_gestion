@@ -14,18 +14,8 @@ import { useTranslation } from "react-i18next";
 import AuthContext from "../../contexts/AuthProvider";
 import bgImage from "../../assets/orange_field_bg.png";
 
-const LoginRight = ({ errorMsg, onSubmitHandler }) => {
+const LoginRight = ({ errorMsg, onSubmitHandler, register, handleSubmit }) => {
   const { t } = useTranslation();
-
-  const { register, handleSubmit } = useForm({
-    defaultValues: {
-      loginEmail: "manager@unida.com",
-      loginPassword: "manager",
-    },
-    resetOptions: {
-      keepDirtyValues: true,
-    },
-  });
 
   return (
     <Box
@@ -83,6 +73,16 @@ const LoginPage = () => {
   const { onLogin } = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState("");
 
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      loginEmail: "manager@unida.com",
+      loginPassword: "manager",
+    },
+    resetOptions: {
+      keepDirtyValues: true,
+    },
+  });
+
   const onSubmitHandler = async (data) => {
     setErrorMsg("");
 
@@ -135,6 +135,8 @@ const LoginPage = () => {
           <LoginRight
             errorMsg={errorMsg}
             onSubmitHandler={onSubmitHandler}
+            register={register}
+            handleSubmit={handleSubmit}
           />
         </Box>
       </Grid>
