@@ -38,6 +38,10 @@ The file structure of each app follows the following pattern:
 
 See: [Django Project Structure - A comprehensive guide](https://medium.com/django-unleashed/django-project-structure-a-comprehensive-guide-4b2ddbf2b6b8)
 
+## Configuration
+
+After deploying is required to apply all migrations on the DB (this creates all required tables and constrains). For this we run: `python3 manage.py migrate`. Then we need to initialize our permission groups: `company_manager` and `company_user`. Again, we run: `python3 manage.py create_default_groups`.
+
 ## Notes on django.urls.reverse
 
 `reverse(viewname)` translate a view name into the associated url.
