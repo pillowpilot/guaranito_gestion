@@ -14,10 +14,8 @@ import { useTranslation } from "react-i18next";
 import AuthContext from "../../contexts/AuthProvider";
 import bgImage from "../../assets/orange_field_bg.png";
 
-const LoginRight = ({ errorMsg, setErrorMsg, onSubmitHandler }) => {
+const LoginRight = ({ errorMsg, onSubmitHandler }) => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
-  const { onLogin } = useContext(AuthContext);
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -136,7 +134,6 @@ const LoginPage = () => {
         <Box sx={{ minWidth: 400 }}>
           <LoginRight
             errorMsg={errorMsg}
-            setErrorMsg={setErrorMsg}
             onSubmitHandler={onSubmitHandler}
           />
         </Box>
