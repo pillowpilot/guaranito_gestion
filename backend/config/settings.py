@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'drf_spectacular',
     'accounts',
     'management',
+    'inference',
     's3_storage',
 ]
 
