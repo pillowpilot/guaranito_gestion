@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Box, Typography, TextField, Stack, Alert, Grid } from "@mui/material";
+import { Box, Typography, Stack, Alert, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
@@ -7,6 +7,7 @@ import AuthContext from "../../contexts/AuthProvider";
 import bgImage from "../../assets/orange_field_bg.png";
 import { LoginButton } from "../../components/buttons/LoginButton";
 import { PasswordField } from "../../components/fields/PasswordField";
+import { RequiredTextField } from "../../components/fields/RequiredTextField";
 
 const LoginRight = ({ errorMsg, onSubmitHandler, register, handleSubmit }) => {
   const { t } = useTranslation();
@@ -22,17 +23,16 @@ const LoginRight = ({ errorMsg, onSubmitHandler, register, handleSubmit }) => {
         <Stack direction="column" gap={2}>
           <Typography variant="h3">{t("login.header")}</Typography>
           <Typography variant="subtitle1">{t("login.caption")}</Typography>
-          <TextField
-            type="email"
-            label={t("login.labels.email")}
-            placeholder="Enter your email here"
-            required
-            {...register("loginEmail")}
+          <RequiredTextField
+            name="loginEmail"
+            labelKey="login.labels.email"
+            requiredKey="login.errors.requiredEmail"
+            register={register}
           />
           <PasswordField
             name="loginPassword"
             labelKey="login.labels.password"
-            requiredKey="login.labels.password"
+            requiredKey="login.errors.requiredPassword"
             register={register}
           />
           <LoginButton tKey="login.loginBtn" />
