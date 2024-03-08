@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import AuthContext from "../../contexts/AuthProvider";
 import bgImage from "../../assets/orange_field_bg.png";
 
-const LoginRight = ({ errorMsg, setErrorMsg }) => {
+const LoginRight = ({ errorMsg, setErrorMsg, onSubmitHandler }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { onLogin } = useContext(AuthContext);
@@ -28,31 +28,6 @@ const LoginRight = ({ errorMsg, setErrorMsg }) => {
       keepDirtyValues: true,
     },
   });
-
-  const onSubmitHandler = async (data) => {
-    setErrorMsg("");
-
-    const email = data.loginEmail;
-    const password = data.loginPassword;
-
-    try {
-      await onLogin(email, password);
-      navigate("/dashboard");
-    } catch (err) {
-      console.log(`Error while login`, err);
-      const responseCode = err.code;
-      switch (responseCode) {
-        case "ERR_NETWORK":
-          setErrorMsg(t("errors.network.default"));
-          break;
-        case "ERR_BAD_REQUEST":
-          setErrorMsg(t("errors.credentials.default"));
-          break;
-        default:
-          setErrorMsg(t("errors.unknown.default"));
-      }
-    }
-  };
 
   return (
     <Box
@@ -105,7 +80,35 @@ const LoginRight = ({ errorMsg, setErrorMsg }) => {
 };
 
 const LoginPage = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { onLogin } = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState("");
+
+  const onSubmitHandler = async (data) => {
+    setErrorMsg("");
+
+    const email = data.loginEmail;
+    const password = data.loginPassword;
+
+    try {
+      await onLogin(email, password);
+      navigate("/dashboard");
+    } catch (err) {
+      console.log(`Error while login`, err);
+      const responseCode = err.code;
+      switch (responseCode) {
+        case "ERR_NETWORK":
+          setErrorMsg(t("errors.network.default"));
+          break;
+        case "ERR_BAD_REQUEST":
+          setErrorMsg(t("errors.credentials.default"));
+          break;
+        default:
+          setErrorMsg(t("errors.unknown.default"));
+      }
+    }
+  };
 
   return (
     <Grid
@@ -131,7 +134,11 @@ const LoginPage = () => {
         }}
       >
         <Box sx={{ minWidth: 400 }}>
-          <LoginRight errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
+          <LoginRight
+            errorMsg={errorMsg}
+            setErrorMsg={setErrorMsg}
+            onSubmitHandler={onSubmitHandler}
+          />
         </Box>
       </Grid>
     </Grid>
