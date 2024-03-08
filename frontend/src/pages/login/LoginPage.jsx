@@ -3,7 +3,6 @@ import {
   Box,
   Typography,
   TextField,
-  Button,
   Stack,
   Alert,
   Grid,
@@ -13,6 +12,7 @@ import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import AuthContext from "../../contexts/AuthProvider";
 import bgImage from "../../assets/orange_field_bg.png";
+import { LoginButton } from "../../components/buttons/LoginButton";
 
 const LoginRight = ({ errorMsg, onSubmitHandler, register, handleSubmit }) => {
   const { t } = useTranslation();
@@ -42,15 +42,7 @@ const LoginRight = ({ errorMsg, onSubmitHandler, register, handleSubmit }) => {
             required
             {...register("loginPassword")}
           />
-          <Button
-            type="submit"
-            variant="contained"
-            sx={{
-              paddingY: "1rem",
-            }}
-          >
-            {t("login.loginBtn")}
-          </Button>
+          <LoginButton tKey="login.loginBtn" />
           <Stack direction="column" gap={2} justifyContent="space-between">
             {errorMsg === "" ? (
               <></>
