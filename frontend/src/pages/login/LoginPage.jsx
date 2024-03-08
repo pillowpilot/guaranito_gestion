@@ -14,12 +14,10 @@ import { useTranslation } from "react-i18next";
 import AuthContext from "../../contexts/AuthProvider";
 import bgImage from "../../assets/orange_field_bg.png";
 
-
-const LoginRight = () => {
+const LoginRight = ({ errorMsg, setErrorMsg }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { auth, setAuth, onLogin } = useContext(AuthContext);
-  const [errorMsg, setErrorMsg] = useState("");
+  const { onLogin } = useContext(AuthContext);
 
   const { register, handleSubmit } = useForm({
     defaultValues: {
@@ -43,7 +41,7 @@ const LoginRight = () => {
     } catch (err) {
       console.log(`Error while login`, err);
       const responseCode = err.code;
-      switch(responseCode){
+      switch (responseCode) {
         case "ERR_NETWORK":
           setErrorMsg(t("errors.network.default"));
           break;
@@ -90,17 +88,15 @@ const LoginRight = () => {
           >
             {t("login.loginBtn")}
           </Button>
-          <Stack
-            direction="column"
-            gap={2}
-            justifyContent="space-between"
-          >
+          <Stack direction="column" gap={2} justifyContent="space-between">
             {errorMsg === "" ? (
               <></>
             ) : (
               <Alert severity="error">{errorMsg}</Alert>
             )}
-            <Typography variant="subtitle1">{t("login.dontHaveAccount")}</Typography>
+            <Typography variant="subtitle1">
+              {t("login.dontHaveAccount")}
+            </Typography>
           </Stack>
         </Stack>
       </form>
@@ -109,6 +105,8 @@ const LoginRight = () => {
 };
 
 const LoginPage = () => {
+  const [errorMsg, setErrorMsg] = useState("");
+
   return (
     <Grid
       container
@@ -133,7 +131,7 @@ const LoginPage = () => {
         }}
       >
         <Box sx={{ minWidth: 400 }}>
-          <LoginRight />
+          <LoginRight errorMsg={errorMsg} setErrorMsg={setErrorMsg} />
         </Box>
       </Grid>
     </Grid>
