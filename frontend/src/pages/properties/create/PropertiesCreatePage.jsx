@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
 import { Paper, Stack, Typography } from "@mui/material";
-import { enqueueSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useQueryClient, useMutation } from "react-query";
 import { useTranslation } from "react-i18next";
-import { queryKeys } from "../queries";
-import { Form } from "./Form";
 import { Api } from "../../../api/client";
 import AuthContext from "../../../contexts/AuthProvider";
+import { useNotification } from "../../../hooks/useNotification";
+import { queryKeys } from "../queries";
+import { Form } from "./Form";
 
 const PageLayout = ({ children }) => {
   const { t } = useTranslation();
@@ -25,8 +25,8 @@ const PageLayout = ({ children }) => {
 };
 
 const NewPropertyPage = () => {
-  const { t } = useTranslation();
   const { auth } = useContext(AuthContext);
+  const { notifySuccess, notifyError } = useNotification();
 
   const formMethods = useForm();
   const { setError } = formMethods;
@@ -36,21 +36,16 @@ const NewPropertyPage = () => {
     mutationFn: (data) => Api.createProperty(data),
     onSuccess: () => {
       queryClient.invalidateQueries(queryKeys.all);
-      enqueueSnackbar(t("properties.create.createSuccessMsg"), {
-        variant: "success",
-      });
+      notifySuccess("properties.create.createSuccessMsg");
     },
     onError: (error) => {
+      notifyError(error);
+
       if (error.response) {
         const data = error.response.data;
-        if (data.detail) enqueueSnackbar(data.detail, { variant: "error" });
         if (data.name) setError("name", { type: "400", message: data.name });
         if (data.geodata)
           setError("geodata", { type: "400", message: data.geodata });
-      } else if (error.request) {
-        enqueueSnackbar(t("errors.network.default"), { variant: "error" });
-      } else {
-        enqueueSnackbar(t("errors.unknown.default"), { variant: "error" });
       }
     },
   });
