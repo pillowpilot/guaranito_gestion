@@ -1,12 +1,13 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Paper, Stack, Typography } from "@mui/material";
 import { enqueueSnackbar } from "notistack";
 import { useForm } from "react-hook-form";
 import { useQueryClient, useMutation } from "react-query";
-import { Api } from "../../../api/client";
 import { useTranslation } from "react-i18next";
-import { Form } from "./Form";
 import { queryKeys } from "../queries";
+import { Form } from "./Form";
+import { Api } from "../../../api/client";
+import AuthContext from "../../../contexts/AuthProvider";
 
 const PageLayout = ({ children }) => {
   const { t } = useTranslation();
@@ -25,6 +26,8 @@ const PageLayout = ({ children }) => {
 
 const NewPropertyPage = () => {
   const { t } = useTranslation();
+  const { auth } = useContext(AuthContext);
+
   const formMethods = useForm();
   const { setError } = formMethods;
 
@@ -52,9 +55,17 @@ const NewPropertyPage = () => {
     },
   });
 
+  const onSubmit = (d) => {
+    mutation.mutate({
+      name: d.name,
+      company: auth.company.id,
+      // geodata: d.geodata,
+    });
+  };
+
   return (
     <PageLayout>
-      <Form formMethods={formMethods} mutation={mutation} />
+      <Form formMethods={formMethods} onSubmit={onSubmit} />
     </PageLayout>
   );
 };

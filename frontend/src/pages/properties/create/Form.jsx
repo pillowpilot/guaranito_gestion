@@ -1,4 +1,3 @@
-import { useContext } from "react";
 import { Stack } from "@mui/material";
 import { Controller } from "react-hook-form";
 import { MuiFileInput } from "mui-file-input";
@@ -7,24 +6,14 @@ import PropTypes from "prop-types";
 import { RequiredTextField } from "../../../components/fields/RequiredTextField";
 import { BackButton } from "../../../components/buttons/BackButton";
 import { SubmitButton } from "../../../components/buttons/SubmitButton";
-import AuthContext from "../../../contexts/AuthProvider";
 
 /**
  * Form for property creation
  */
-const Form = ({ formMethods, mutation, errors = {} }) => {
+const Form = ({ formMethods, onSubmit, errors = {} }) => {
   const { t } = useTranslation();
-  const { auth } = useContext(AuthContext);
 
   const { register, handleSubmit, control } = formMethods;
-
-  const onSubmit = (d) => {
-    mutation.mutate({
-      name: d.name,
-      company: auth.company.id,
-      geodata: d.geodata,
-    });
-  };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
