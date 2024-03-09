@@ -114,3 +114,27 @@ class TestParcelViewset(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Parcel.objects.get(id=p.id).is_active, False)
+
+    def test_parcel_total(self):
+        c = CompanyFactory.create()
+        m = User.objects.create_company_user(email="u@c", password="strong", company=c)
+        ParcelFactory.create_batch(111, company=c)
+
+        # logically delete some of them
+        ids = [10, 20, 33]
+        for id in ids:
+            Parcel.objects.filter(id=id).is_active = False
+
+        token_url = reverse("token_obtain_pair")
+        response = self.client.post(
+            token_url, data={"email": "u@c", "password": "strong"}
+        )
+        token = response.data["access"]
+
+        url = reverse("parcel-total")
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(
+            len(Parcel.objects.filter(is_active=True)), response.data["total"]
+        )

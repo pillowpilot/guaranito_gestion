@@ -12,7 +12,7 @@ class ParcelViewSet(viewsets.ModelViewSet):
     """
     Parcel Model Viewset
 
-    It filters the queryset by the logged in user's company. 
+    It filters the queryset by the logged in user's company.
     It also replaces the usual drop db operation with a 'logical drop' for easy undo and
     filters access using Django's permissions:
     "publicapp.view_parcel" for list and retrieve actions,
@@ -22,7 +22,9 @@ class ParcelViewSet(viewsets.ModelViewSet):
     """
 
     serializer_class = ParcelSerializer
-    permission_classes = [IsAuthenticated & CreatingAtSameCompany & CustomDjangoModelPermissions]
+    permission_classes = [
+        IsAuthenticated & CreatingAtSameCompany & CustomDjangoModelPermissions
+    ]
 
     def get_queryset(self):
         """
@@ -35,7 +37,7 @@ class ParcelViewSet(viewsets.ModelViewSet):
         if getattr(self, "swagger_fake_view", False):
             return Parcel.objects.none()
 
-        user: User = self.request.user # type: ignore
+        user: User = self.request.user  # type: ignore
         company = user.company
         if company:
             return Parcel.objects.filter(company=company, is_active=True)
@@ -88,13 +90,13 @@ class ParcelViewSet(viewsets.ModelViewSet):
     #     lots = LotSerializer(lots, many=True).data
     #     return Response(lots)
 
-    # @action(detail=False, methods=["get"])
-    # def total(self, request) -> Response:
-    #     """
-    #     Returns the numeber of active parcels.
+    @action(detail=False, methods=["get"])
+    def total(self, request) -> Response:
+        """
+        Returns the numeber of active parcels. Its name is parcel-total.
 
-    #     :param request: Request object.
-    #     :return: Response object with the number of active parcels.
-    #     """
-    #     total = Parcel.objects.filter(is_active=True).count()
-    #     return Response({"total": total}, status=status.HTTP_200_OK)
+        :param request: Request object.
+        :return: Response object with the number of active parcels.
+        """
+        total = Parcel.objects.filter(is_active=True).count()
+        return Response({"total": total}, status=status.HTTP_200_OK)
