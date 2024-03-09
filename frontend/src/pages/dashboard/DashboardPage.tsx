@@ -1,13 +1,4 @@
-import React from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Typography,
-  Stack,
-  Box,
-  Container,
-} from "@mui/material";
+import { Stack, Container } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { useQuery } from "react-query";
 import { useTranslation } from "react-i18next";
@@ -23,13 +14,12 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { Pie, Line } from "react-chartjs-2";
-import pieChartData from "./pieData";
-import linesChartData from "./linesData";
 import { Loading } from "./Loading";
 import { Api } from "../../api/client";
 import { Map } from "./Map";
 import { TotalCard } from "../../components/cards/TotalCard";
+import { LinesGraphCard } from "./LinesGraphCard";
+import { PieGraphCard } from "./PieGraphCard";
 
 ChartJS.register(
   CategoryScale,
@@ -113,7 +103,7 @@ const DashboardPage = () => {
             </Grid>
 
             <Grid xs={1} md={4} sx={{ flexGrow: 1 }}>
-            <TotalCard
+              <TotalCard
                 title="Total de Inferencias"
                 subtitle="lorem ipsum"
                 content={dashboardData.total.inferences}
@@ -121,7 +111,7 @@ const DashboardPage = () => {
             </Grid>
 
             <Grid xs={1} md={4} sx={{ flexGrow: 1 }}>
-            <TotalCard
+              <TotalCard
                 title="Total de Fincas"
                 subtitle="lorem ipsum"
                 content="PROPERTIES"
@@ -139,41 +129,11 @@ const DashboardPage = () => {
             disableEqualOverflow
           >
             <Grid xs={1} md={8}>
-              <Card
-                sx={{
-                  height: "100%",
-                  background:
-                    "linear-gradient(90deg, #1976CD 4px, transparent 5px, transparent)",
-                }}
-              >
-                <CardHeader title="Grafico Lines" subheader="lorem ipsum" />
-                <CardContent>
-                  <Stack justifyContent="center">
-                    <Box sx={{ aspectRatio: 2 }}>
-                      <Line data={linesChartData} />
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Card>
+              <LinesGraphCard title="Gráfico Lines" subtitle="lorem ipsum" />
             </Grid>
 
             <Grid xs={1} md={4}>
-              <Card
-                sx={{
-                  height: "100%",
-                  background:
-                    "linear-gradient(90deg, #1976CD 4px, transparent 5px, transparent)",
-                }}
-              >
-                <CardHeader title="Grafico Pie" subheader="lorem ipsum" />
-                <CardContent>
-                  <Stack justifyContent="center">
-                    <Box sx={{ aspectRatio: 1 }}>
-                      <Pie data={pieChartData} />
-                    </Box>
-                  </Stack>
-                </CardContent>
-              </Card>
+              <PieGraphCard title="Gráfico Pie" subtitle="lorem ipsum" />
             </Grid>
 
             <Grid xs={1} md={12}>
