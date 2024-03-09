@@ -11,7 +11,7 @@ class Command(BaseCommand):
 
         user_related_codenames = ["view_user", "add_user", "change_user"]
         parcel_related_codenames = ["view_parcel", "add_parcel", "change_parcel"]
-        inference_job_related_codenames = ["view_inferencejob", "add_inferencejob"]
+        inference_job_related_codenames = ["view_inferencejob", "add_inferencejob", "delete_inferencejob"]
         try:
             for codename in user_related_codenames:
                 perm = Permission.objects.get(codename=codename)

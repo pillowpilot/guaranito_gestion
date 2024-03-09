@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from accounts.factories import CompanyFactory, UserFactory
 from accounts.models import User
-from inference.factories import InferenceModelFactory, InferenceJobFactory
-from inference.models import InferenceModel
+from inference.factories import InferenceJobFactory, InferenceModelFactory
+from inference.models import InferenceJob
 
 from pprint import pprint
 
@@ -67,9 +67,7 @@ class TestInferenceModelViewset(APITestCase):
         InferenceJobFactory.create_batch(10, user=u)
         InferenceJobFactory.create_batch(10, user=u2)
 
-        m = User.objects.create_company_user(
-            email="m@c", password="strong", company=c
-        )
+        m = User.objects.create_company_user(email="m@c", password="strong", company=c)
 
         token_url = reverse("token_obtain_pair")
         response = self.client.post(
@@ -90,4 +88,74 @@ class TestInferenceModelViewset(APITestCase):
             u = qs[0]
             self.assertEqual(u.company.id, c.id)
 
-        
+    def test_create_job_from_different_company(self):
+        m = InferenceModelFactory.create()
+        c1 = CompanyFactory.create()
+        c2 = CompanyFactory.create()
+
+        u1 = User.objects.create_company_manager(
+            email="m@c1", password="strong", company=c1
+        )
+        u2 = User.objects.create_company_manager(
+            email="m@c2", password="strong", company=c2
+        )
+
+        token_url = reverse("token_obtain_pair")
+        response = self.client.post(
+            token_url, data={"email": "m@c1", "password": "strong"}
+        )
+        token = response.data["access"]
+
+        url = reverse("inferencejob-list")
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
+        data = {
+            "user": u2.id,
+            "model": m.id,
+        }
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_create_job_as_another_user(self):
+        m = InferenceModelFactory.create()
+        c = CompanyFactory.create()
+
+        u1 = User.objects.create_company_manager(
+            email="u1@c", password="strong", company=c
+        )
+        u2 = User.objects.create_company_manager(
+            email="u2@c", password="strong", company=c
+        )
+
+        token_url = reverse("token_obtain_pair")
+        response = self.client.post(
+            token_url, data={"email": "u1@c", "password": "strong"}
+        )
+        token = response.data["access"]
+
+        url = reverse("inferencejob-list")
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
+        data = {
+            "user": u2.id,
+            "model": m.id,
+        }
+        response = self.client.post(url, data=data)
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_perform_logical_drop(self):
+        c = CompanyFactory.create()
+        ju = UserFactory.create(company=c)
+        j = InferenceJobFactory.create(user=ju)
+
+        u = User.objects.create_company_user(email="u@c", password="strong", company=c)
+
+        token_url = reverse("token_obtain_pair")
+        response = self.client.post(
+            token_url, data={"email": "u@c", "password": "strong"}
+        )
+        token = response.data["access"]
+
+        url = reverse("inferencejob-detail", kwargs={"pk": j.id})
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(InferenceJob.objects.get(id=j.id).is_active, False)
