@@ -4,8 +4,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from accounts.permissions import CustomDjangoModelPermissions, CreatingAtSameCompany
 from accounts.models import User
-from management.models import Parcel
-from management.serializers import ParcelSerializer
+from management.models import Parcel, Lot
+from management.serializers import ParcelSerializer, LotSerializer
 
 
 class ParcelViewSet(viewsets.ModelViewSet):
@@ -15,10 +15,10 @@ class ParcelViewSet(viewsets.ModelViewSet):
     It filters the queryset by the logged in user's company.
     It also replaces the usual drop db operation with a 'logical drop' for easy undo and
     filters access using Django's permissions:
-    "publicapp.view_parcel" for list and retrieve actions,
-    "publicapp.add_parcel" for create action,
-    "publicapp.change_parcel" for update action, and
-    "publicapp.delete_parcel" for destroy action.
+    "view_parcel" for list and retrieve actions,
+    "add_parcel" for create action,
+    "change_parcel" for update action, and
+    "delete_parcel" for destroy action.
     """
 
     serializer_class = ParcelSerializer
@@ -99,4 +99,68 @@ class ParcelViewSet(viewsets.ModelViewSet):
         :return: Response object with the number of active parcels.
         """
         total = Parcel.objects.filter(is_active=True).count()
+        return Response({"total": total}, status=status.HTTP_200_OK)
+
+
+class LotViewSet(viewsets.ModelViewSet):
+    """
+    Lot Model Viewset
+
+    It filters the queryset by the logged in user's company.
+    It also replaces the usual drop db operation with a 'logical drop' for easy undo and
+    filters access using Django's permissions:
+    "view_lot" for list and retrieve actions,
+    "add_lot" for create action,
+    "change_lot" for update action, and
+    "delete_lot" for destroy action.
+    """
+
+    serializer_class = LotSerializer
+    permission_classes = [IsAuthenticated & CustomDjangoModelPermissions]
+
+    def get_queryset(self):
+        """
+        This view should allow access only to the lots
+        related to the authenticated user's company.
+        If the user is not logged in, return an empty queryset.
+        """
+        # This is a workaround for swagger-ui. It returns an empty queryset when
+        # the user is not logged in. This is not a problem for the rest of the app.
+        if getattr(self, "swagger_fake_view", False):
+            return Parcel.objects.none()
+
+        user: User = self.request.user  # type: ignore
+        company = user.company
+        if company:
+            return Lot.objects.filter(parcel__company=company, is_active=True)
+        else:
+            return Lot.objects.none()
+
+    def perform_destroy(self, instance) -> None:
+        """
+        Replace usual drop db operation with a 'logical drop' for easy undo.
+
+        Each lot has an 'is_active' bool field that indicates if that instance is
+        presented to the end user. If the user deletes an instance, 'is_active' is
+        set to false and the instance is effectively deleted from the user's POV.
+        However, the instance data is still present in the database.
+
+        This is done to allow an admin to undo the 'logical delete' and bring the
+        instance data back.
+
+        :param instance: Lot instance to be deleted.
+        :return: None.
+        """
+        instance.is_active = False
+        instance.save()
+
+    @action(detail=False, methods=["get"])
+    def total(self, request) -> Response:
+        """
+        Returns the numeber of active lots. Its name is lot-total.
+
+        :param request: Request object.
+        :return: Response object with the number of active lot.
+        """
+        total = Lot.objects.filter(is_active=True).count()
         return Response({"total": total}, status=status.HTTP_200_OK)
