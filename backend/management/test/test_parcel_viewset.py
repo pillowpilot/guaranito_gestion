@@ -4,6 +4,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from accounts.models import User
 from accounts.factories import CompanyFactory
+from management.models import Parcel
 from management.factories import ParcelFactory
 
 
@@ -82,9 +83,7 @@ class TestParcelViewset(APITestCase):
     def test_create_parcel_by_company_user(self):
         c = CompanyFactory.create()
 
-        m = User.objects.create_company_user(
-            email="u@c", password="strong", company=c
-        )
+        m = User.objects.create_company_user(email="u@c", password="strong", company=c)
 
         token_url = reverse("token_obtain_pair")
         response = self.client.post(
@@ -98,3 +97,20 @@ class TestParcelViewset(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["name"], "new parcel 2")
         self.assertEqual(response.data["company"], c.id)
+
+    def test_logical_drop_parcel(self):
+        c = CompanyFactory.create()
+        m = User.objects.create_company_user(email="u@c", password="strong", company=c)
+        p = ParcelFactory.create(company=c)
+
+        token_url = reverse("token_obtain_pair")
+        response = self.client.post(
+            token_url, data={"email": "u@c", "password": "strong"}
+        )
+        token = response.data["access"]
+
+        url = reverse("parcel-detail", kwargs={"pk": p.id})
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Parcel.objects.get(id=p.id).is_active, False)
