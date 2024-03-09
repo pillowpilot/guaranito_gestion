@@ -103,11 +103,6 @@ const PropertiesPage = () => {
       width: 250,
     },
     {
-      field: "company",
-      headerName: t("properties.list.datagrid.company"),
-      width: 250,
-    },
-    {
       field: "created_on",
       headerName: t("properties.list.datagrid.date"),
       width: 200,
