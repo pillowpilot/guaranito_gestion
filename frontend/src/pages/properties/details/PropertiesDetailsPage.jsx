@@ -1,7 +1,6 @@
 import { Typography, Box, Paper, Stack } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useSnackbar } from "notistack";
 import { Api } from "../../../api/client";
 import { useTranslation } from "react-i18next";
 import { useMutation, useQueryClient } from "react-query";
@@ -9,6 +8,7 @@ import { LoadingPropertyForm } from "./LoadingForm";
 import { PropertyForm } from "./Form";
 import { queryKeys } from "../queries";
 import { useRetrieveProperty } from "../../../hooks/property/useRetrieveProperty";
+import { useNotification } from "../../../hooks/useNotification";
 
 const PageLayout = ({ children }) => {
   const { t } = useTranslation();
@@ -31,8 +31,7 @@ const PageLayout = ({ children }) => {
 
 const PropertyDetailsPage = () => {
   const { id } = useParams();
-  const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { notifySuccess, notifyError } = useNotification();
 
   const formMethods = useForm();
   const { setError } = formMethods;
@@ -43,19 +42,13 @@ const PropertyDetailsPage = () => {
     mutationFn: (data) => Api.updateProperty(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries(queryKeys.all);
-      enqueueSnackbar(t("properties.details.updateSuccessMsg"), {
-        variant: "success",
-      });
+      notifySuccess("properties.details.updateSuccessMsg");
     },
     onError: (error) => {
+      notifyError(error);
       if (error.response) {
         const data = error.response.data;
-        if (data.detail) enqueueSnackbar(data.detail, { variant: "error" });
         if (data.name) setError("name", { type: "400", message: data.name });
-      } else if (error.request) {
-        enqueueSnackbar(t("errors.network.default"), { variant: "error" });
-      } else {
-        enqueueSnackbar(t("errors.unknown.default"), { variant: "error" });
       }
     },
   });
