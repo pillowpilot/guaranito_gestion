@@ -61,3 +61,12 @@ class TestCommand(TestCase):
         for codename in codenames:
             p = Permission.objects.get(codename=codename)
             self.assertTrue(p in g.permissions.all())
+
+    def test_inference_job_perms_to_company_manager(self):
+        call_command(self.command_name)
+        g = Group.objects.get(name="company_manager")
+
+        codenames = ["view_inferencejob", "add_inferencejob"]
+        for codename in codenames:
+            p = Permission.objects.get(codename=codename)
+            self.assertTrue(p in g.permissions.all())
