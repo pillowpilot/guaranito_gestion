@@ -21,6 +21,7 @@ class Command(BaseCommand):
             "add_inferencejob",
             "delete_inferencejob",
         ]
+        lot_related_codenames = ["view_lot", "add_lot", "change_lot", "delete_lot"]
         try:
             for codename in user_related_codenames:
                 perm = Permission.objects.get(codename=codename)
@@ -32,6 +33,11 @@ class Command(BaseCommand):
                 company_user.permissions.add(perm)
 
             for codename in inference_job_related_codenames:
+                perm = Permission.objects.get(codename=codename)
+                company_manager.permissions.add(perm)
+                company_user.permissions.add(perm)
+
+            for codename in lot_related_codenames:
                 perm = Permission.objects.get(codename=codename)
                 company_manager.permissions.add(perm)
                 company_user.permissions.add(perm)
