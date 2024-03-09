@@ -115,7 +115,7 @@ export const Api = {
   retrieveInference: (id: number) => apiClient.get(`/api/inferences/${id}/`),
   deleteInference: (id: number) => apiClient.delete(`/api/inferences/${id}/`),
   retrieveTotalNumberOfInferences: () =>
-    apiClient.get(`/api/inferences/total/`),
+    apiClient.get(`/api/inferencejobs/total/`),
 };
 
 export default apiClient;

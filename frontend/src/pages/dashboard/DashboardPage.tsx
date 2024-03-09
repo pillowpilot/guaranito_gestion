@@ -29,6 +29,7 @@ import linesChartData from "./linesData";
 import { Loading } from "./Loading";
 import { Api } from "../../api/client";
 import { Map } from "./Map";
+import { TotalCard } from "../../components/cards/TotalCard";
 
 ChartJS.register(
   CategoryScale,
@@ -63,32 +64,32 @@ const DashboardPage = () => {
     },
   });
 
-  const lotsTotal = useQuery({
-    queryKey: ["lots", "total"],
-    queryFn: Api.retrieveTotalNumberOfLots,
-    onError: (error) => {
-      manageErrorsFromQuery(t, error, enqueueSnackbar);
-    },
-  });
+  // const lotsTotal = useQuery({
+  //   queryKey: ["lots", "total"],
+  //   queryFn: Api.retrieveTotalNumberOfLots,
+  //   onError: (error) => {
+  //     manageErrorsFromQuery(t, error, enqueueSnackbar);
+  //   },
+  // });
 
-  const propertiesTotal = useQuery({
-    queryKey: ["properties", "total"],
-    queryFn: Api.retrieveTotalNumberOfProperties,
-    onError: (error) => {
-      manageErrorsFromQuery(t, error, enqueueSnackbar);
-    },
-  });
+  // const propertiesTotal = useQuery({
+  //   queryKey: ["properties", "total"],
+  //   queryFn: Api.retrieveTotalNumberOfProperties,
+  //   onError: (error) => {
+  //     manageErrorsFromQuery(t, error, enqueueSnackbar);
+  //   },
+  // });
 
   if (
-    inferencesTotal.isSuccess &&
-    lotsTotal.isSuccess &&
-    propertiesTotal.isSuccess
+    inferencesTotal.isSuccess // &&
+    // lotsTotal.isSuccess &&
+    // propertiesTotal.isSuccess
   ) {
     const dashboardData = {
       total: {
         inferences: inferencesTotal.data.data.total,
-        lots: lotsTotal.data.data.total,
-        properties: propertiesTotal.data.data.total,
+        // lots: lotsTotal.data.data.total,
+        // properties: propertiesTotal.data.data.total,
       },
     };
 
@@ -104,57 +105,27 @@ const DashboardPage = () => {
             disableEqualOverflow
           >
             <Grid xs={1} md={4} sx={{ flexGrow: 1 }}>
-              <Card
-                sx={{
-                  height: "100%",
-                  background:
-                    "linear-gradient(90deg, #1976CD 4px, transparent 5px, transparent)",
-                }}
-              >
-                <CardHeader title="Total de Lotes" subheader="lorem ipsum" />
-                <CardContent>
-                  <Typography variant="h5">
-                    {dashboardData.total.lots}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <TotalCard
+                title="Total de Lotes"
+                subtitle="lorem ipsum"
+                content="LOTS"
+              />
             </Grid>
 
             <Grid xs={1} md={4} sx={{ flexGrow: 1 }}>
-              <Card
-                sx={{
-                  height: "100%",
-                  background:
-                    "linear-gradient(90deg, #1976CD 4px, transparent 5px, transparent)",
-                }}
-              >
-                <CardHeader
-                  title="Total de Inferencias"
-                  subheader="lorem ipsum"
-                />
-                <CardContent>
-                  <Typography variant="h5">
-                    {dashboardData.total.inferences}
-                  </Typography>
-                </CardContent>
-              </Card>
+            <TotalCard
+                title="Total de Inferencias"
+                subtitle="lorem ipsum"
+                content={dashboardData.total.inferences}
+              />
             </Grid>
 
             <Grid xs={1} md={4} sx={{ flexGrow: 1 }}>
-              <Card
-                sx={{
-                  height: "100%",
-                  background:
-                    "linear-gradient(90deg, #1976CD 4px, transparent 5px, transparent)",
-                }}
-              >
-                <CardHeader title="Total de Fincas" subheader="lorem ipsum" />
-                <CardContent>
-                  <Typography variant="h5">
-                    {dashboardData.total.properties}
-                  </Typography>
-                </CardContent>
-              </Card>
+            <TotalCard
+                title="Total de Fincas"
+                subtitle="lorem ipsum"
+                content="PROPERTIES"
+              />
             </Grid>
           </Grid>
 
