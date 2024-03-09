@@ -13,17 +13,15 @@ const useListProperties = () => {
   const listProperties = useQuery({
     queryKey: LIST_PROPERTIES_QK,
     queryFn: Api.listProperties,
-    select: (data) => {
-      console.log("data", data);
-      const clean= data.data?.results?.map((o) => ({
+    select: (response) => {
+      const data = response.data;
+      const clean = data.results.map((o) => ({
         id: o.id,
         name: o.name,
-        company: o.company_name,
-        geodata: o.geodata,
-        created_on: o.created_on,
-        updated_on: o.updated_on,
+        company: o.company,
+        created_on: o.created_at,
+        updated_on: o.updated_at,
       }));
-      console.log(clean);
       return clean;
     },
     onError: (error) => notifyError(error),

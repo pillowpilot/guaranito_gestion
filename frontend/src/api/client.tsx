@@ -67,6 +67,20 @@ const buildApiClient = () => {
 
 const apiClient = buildApiClient();
 
+interface Property {
+  id: number;
+  name: string;
+  company: number;
+  created_at: string;
+  updated_at: string;
+}
+interface ListPropertiesResponse {
+  count: number;
+  previous: string | null;
+  next: string | null;
+  results: Property[];
+}
+
 export const Api = {
   login: (data: LoginData) =>
     apiClient.post<LoginResponse>(`/api/token/`, data),
@@ -78,7 +92,7 @@ export const Api = {
   retrieveUser: (id: number) => apiClient.get(`/api/users/${id}/`),
   updateUser: (id: number, data) => apiClient.put(`/api/users/${id}/`, data),
 
-  listProperties: () => apiClient.get(`/api/parcels/`),
+  listProperties: () => apiClient.get<ListPropertiesResponse>(`/api/parcels/`),
   createProperty: (data) =>
     apiClient.post(`/api/parcels/`, data, {
       headers: {
