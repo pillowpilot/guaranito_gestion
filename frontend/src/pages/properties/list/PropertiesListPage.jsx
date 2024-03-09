@@ -21,7 +21,7 @@ const PropertiesPage = () => {
   const { t } = useTranslation();
   const { notifySuccess, notifyError } = useNotification();
 
-  const [propertyId, setPropertyId] = useState(null);
+  const [propertyId, setPropertyIdToDelete] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const listProperties = useListProperties();
@@ -39,58 +39,73 @@ const PropertiesPage = () => {
     },
   });
 
+  const idColumn = {
+    field: "id",
+    headerName: t("properties.list.datagrid.id"),
+  };
+  const propertyNameColumn = {
+    field: "name",
+    headerName: t("properties.list.datagrid.name"),
+    width: 250,
+  };
+  const createdOnColumn = {
+    field: "created_on",
+    headerName: t("properties.list.datagrid.date"),
+    width: 200,
+    renderCell: (params) => (
+      <DateCell
+        date={params.value}
+        translationKey="properties.list.datagrid.dateFormat"
+      />
+    ),
+  };
+  const updatedOnColumn = {
+    field: "updated_on",
+    headerName: t("properties.list.datagrid.updatedOn"),
+    width: 200,
+    renderCell: (params) => (
+      <DateCell
+        date={params.value}
+        translationKey="properties.list.datagrid.updatedOnFormat"
+      />
+    ),
+  };
+
+  const buildOnClickHandler = (id) => {
+    if (setDeleteDialogOpen && setPropertyIdToDelete)
+      return () => {
+        setPropertyIdToDelete(id);
+        setDeleteDialogOpen(true);
+      };
+    else return () => {};
+  };
+
+  const actionsColumns = {
+    field: "actions",
+    headerName: t("properties.list.datagrid.actions"),
+    width: 150,
+    renderCell: (params) => {
+      return (
+        <Stack direction="row">
+          <DataGridDetailsButton id={params.id} />
+          <IconButton
+            variant="contained"
+            color="primary"
+            onClick={buildOnClickHandler(params.id)}
+          >
+            <DeleteIcon />
+          </IconButton>
+          {params.row.geodata ? <DataGridMapButton id={params.id} /> : <></>}
+        </Stack>
+      );
+    },
+  };
   const columns = [
-    { field: "id", headerName: t("properties.list.datagrid.id") },
-    {
-      field: "name",
-      headerName: t("properties.list.datagrid.name"),
-      width: 250,
-    },
-    {
-      field: "created_on",
-      headerName: t("properties.list.datagrid.date"),
-      width: 200,
-      renderCell: (params) => (
-        <DateCell
-          date={params.value}
-          translationKey="properties.list.datagrid.dateFormat"
-        />
-      ),
-    },
-    {
-      field: "updated_on",
-      headerName: t("properties.list.datagrid.updatedOn"),
-      width: 200,
-      renderCell: (params) => (
-        <DateCell
-          date={params.value}
-          translationKey="properties.list.datagrid.updatedOnFormat"
-        />
-      ),
-    },
-    {
-      field: "actions",
-      headerName: t("properties.list.datagrid.actions"),
-      width: 150,
-      renderCell: (params) => {
-        return (
-          <Stack direction="row">
-            <DataGridDetailsButton id={params.id} />
-            <IconButton
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                setPropertyId(params.id);
-                setDeleteDialogOpen(true);
-              }}
-            >
-              <DeleteIcon />
-            </IconButton>
-            {params.row.geodata ? <DataGridMapButton id={params.id} /> : <></>}
-          </Stack>
-        );
-      },
-    },
+    idColumn,
+    propertyNameColumn,
+    createdOnColumn,
+    updatedOnColumn,
+    actionsColumns,
   ];
 
   if (listProperties.isSuccess)
@@ -105,7 +120,7 @@ const PropertiesPage = () => {
           text={t("properties.delete.confirmationMsg")}
           onAccept={() => {
             mutation.mutate(propertyId);
-            setPropertyId(null);
+            setPropertyIdToDelete(null);
             setDeleteDialogOpen(false);
           }}
           onAcceptLabel={t("properties.delete.deleteBtn")}
