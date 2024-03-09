@@ -57,7 +57,7 @@ class TestCommand(TestCase):
         call_command(self.command_name)
         g = Group.objects.get(name="company_user")
 
-        codenames = ["view_parcel", "add_parcel", "change_parcel"]
+        codenames = ["view_parcel", "add_parcel", "change_parcel", "delete_parcel"]
         for codename in codenames:
             p = Permission.objects.get(codename=codename)
             self.assertTrue(p in g.permissions.all())
