@@ -8,7 +8,6 @@ import {
   Stack,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useSnackbar } from "notistack";
 import { Link } from "react-router-dom";
 import { useQueryClient, useMutation } from "react-query";
 import { useTranslation } from "react-i18next";
@@ -72,8 +71,7 @@ const Actions = () => {
 
 const PropertiesPage = () => {
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
-  const { notifyError } = useNotification();
+  const { notifySuccess, notifyError } = useNotification();
 
   const [propertyId, setPropertyId] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -86,9 +84,7 @@ const PropertiesPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(queryKeys.all);
       queryClient.invalidateQueries(["inferences"]);
-      enqueueSnackbar(t("properties.delete.successMsg"), {
-        variant: "success",
-      });
+      notifySuccess("properties.delete.successMsg");
     },
     onError: (error) => {
       notifyError(error);
