@@ -159,3 +159,21 @@ class TestInferenceModelViewset(APITestCase):
         response = self.client.delete(url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(InferenceJob.objects.get(id=j.id).is_active, False)
+
+    def test_inference_job_total(self):
+        InferenceJobFactory.create_batch(100)
+
+        c = CompanyFactory.create()
+        u = User.objects.create_company_user(email="u@c", password="strong", company=c)
+
+        token_url = reverse("token_obtain_pair")
+        response = self.client.post(
+            token_url, data={"email": "u@c", "password": "strong"}
+        )
+        token = response.data["access"]
+
+        url = reverse("inferencejob-total")
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["total"], 100)

@@ -1,4 +1,6 @@
-from rest_framework import viewsets, mixins
+from rest_framework import viewsets, mixins, status
+from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import CustomDjangoModelPermissions, CreatingAsOneself
 from inference.models import InferenceModel, InferenceJob
@@ -63,3 +65,14 @@ class InferenceJobViewSet(
         """
         instance.is_active = False
         instance.save()
+
+    @action(detail=False, methods=["GET"])
+    def total(self, request):
+        """
+        Returns the numeber of active inference jobs. Its name is inferencejob-total.
+
+        :param request: Request object.
+        :return: Response object with the number of active inference jobs.
+        """
+        total = InferenceJob.objects.filter(is_active=True).count()
+        return Response({"total": total}, status=status.HTTP_200_OK)
