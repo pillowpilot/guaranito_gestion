@@ -1,11 +1,12 @@
 import { useContext } from "react";
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { Controller } from "react-hook-form";
 import { MuiFileInput } from "mui-file-input";
 import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { RequiredTextField } from "../../../components/fields/RequiredTextField";
 import { BackButton } from "../../../components/buttons/BackButton";
+import { SubmitButton } from "../../../components/buttons/SubmitButton";
 import AuthContext from "../../../contexts/AuthProvider";
 
 /**
@@ -61,9 +62,7 @@ const Form = ({ formMethods, mutation, errors = {} }) => {
         />
         <Stack direction="row" justifyContent="center" gap={1}>
           <BackButton labelKey="properties.create.goBackBtn" />
-          <Button variant="contained" type="submit" data-testid="submit-btn">
-            {t("properties.create.saveBtn")}
-          </Button>
+          <SubmitButton labelKey="properties.create.saveBtn" />
         </Stack>
       </Stack>
     </form>
