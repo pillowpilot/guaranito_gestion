@@ -1,18 +1,14 @@
 import { Stack } from "@mui/material";
-import { Controller } from "react-hook-form";
-import { MuiFileInput } from "mui-file-input";
-import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import { RequiredTextField } from "../../../components/fields/RequiredTextField";
 import { BackButton } from "../../../components/buttons/BackButton";
 import { SubmitButton } from "../../../components/buttons/SubmitButton";
+import { GeodataField } from "./GeodataField";
 
 /**
  * Form for property creation
  */
 const Form = ({ formMethods, onSubmit, errors = {} }) => {
-  const { t } = useTranslation();
-
   const { register, handleSubmit, control } = formMethods;
 
   return (
@@ -31,24 +27,11 @@ const Form = ({ formMethods, onSubmit, errors = {} }) => {
           hasServerError={!!errors.name}
           errorMsg={errors.name?.message}
         />
-        <Controller
-          name="geodata"
+        {/* <GeodataField
+          labelKey="properties.create.labels.geodata"
+          requiredKey="properties.create.errors.requiredGeodata"
           control={control}
-          rules={{
-            required: t("properties.create.errors.requiredGeodata"),
-          }}
-          render={({ field, fieldState }) => {
-            return (
-              <MuiFileInput
-                {...field}
-                label={t("properties.create.labels.geodata")}
-                inputProps={{ accept: ".geojson" }}
-                error={fieldState.invalid}
-                helperText={fieldState.error?.message}
-              />
-            );
-          }}
-        />
+        /> */}
         <Stack direction="row" justifyContent="center" gap={1}>
           <BackButton labelKey="properties.create.goBackBtn" />
           <SubmitButton labelKey="properties.create.saveBtn" />
