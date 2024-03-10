@@ -30,10 +30,17 @@ class InferenceJob(models.Model):
     Inference jobs.
     """
 
+    class Status(models.TextChoices):
+        PENDING = ("pending", "Pending")
+        PROCESSING = ("processing", "Processing")
+        SUCCESS = ("success", "Success")
+        FAILURE = ("failure", "Failure")
+
     user = models.ForeignKey(User, on_delete=models.RESTRICT)
     lot = models.ForeignKey(Lot, on_delete=models.RESTRICT)
     model = models.ForeignKey(InferenceModel, on_delete=models.RESTRICT)
     image = models.ImageField(upload_to="inference_jobs_images", null=True)
+    status = models.TextField(choices=Status.choices, default=Status.PENDING)
     latitude = models.FloatField(null=True)
     longitude = models.FloatField(null=True)
     is_active = models.BooleanField(default=True)

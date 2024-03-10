@@ -28,6 +28,7 @@ class InferenceJobSerializer(serializers.ModelSerializer):
     lot_name = serializers.CharField(source="lot.name", read_only=True)
     model = serializers.PrimaryKeyRelatedField(queryset=InferenceModel.objects.all())
     model_codename = serializers.CharField(source="model.name", read_only=True)
+    status = serializers.CharField(read_only=True)
     latitude = serializers.FloatField(read_only=True)
     longitude = serializers.FloatField(read_only=True)
 
@@ -41,6 +42,7 @@ class InferenceJobSerializer(serializers.ModelSerializer):
             "lot_name",
             "model",
             "model_codename",
+            "status",
             "image",
             "latitude",
             "longitude",

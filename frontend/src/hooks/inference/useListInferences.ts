@@ -11,7 +11,7 @@ const LIST_INFERENCE_QK = ["inferences"];
 const useListInferences = () => {
   const { notifyError } = useNotification();
 
-  const { displayModelName } = useInferenceJobUtils();
+  const { displayModelName, displayStatus } = useInferenceJobUtils();
 
   const listInferences = useQuery({
     queryKey: LIST_INFERENCE_QK,
@@ -26,7 +26,7 @@ const useListInferences = () => {
         updated_on: job.updated_at,
         model: displayModelName(job.model_codename),
         task_id: "",
-        status: "",
+        status: displayStatus(job.status),
         coords:
           job.latitude !== null && job.longitude !== null
             ? { lat: job.latitude, lon: job.longitude }

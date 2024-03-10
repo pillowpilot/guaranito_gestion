@@ -20,13 +20,14 @@ const CoordinateCell = ({ lat, lon }) => {
 
 const StatusCell = ({ status }) => {
   const getColors = (st) => {
+    // TODO Improve this!
     switch (st) {
-      case "Completed":
+      case "SUCCESS" | "EXITO":
         return { color: "#0d6832", backgroundColor: "#d6f0e0" };
-      case "Pending":
-      case "Running":
+      case "PENDING" | "PENDIENTE":
+      case "PROCESSING" | "PROCESANDO":
         return { color: "#73510d", backgroundColor: "#fbf0da" };
-      default:
+      case "FAILURE" | "FRACASO":
         return { color: "white", backgroundColor: "red" };
     }
   };

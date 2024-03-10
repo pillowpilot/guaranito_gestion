@@ -118,6 +118,7 @@ interface InferenceJob {
   lot_name: string;
   model: number;
   model_codename: "leafs" | "fruits" | "trees";
+  status: "pending" | "processing" | "success" | "failure";
   image: null | string;
   latitude: null | number;
   longitude: null | number;

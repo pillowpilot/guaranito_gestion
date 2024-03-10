@@ -18,6 +18,10 @@ const t = {
     },
     labels: {
       noCoords: "No coordenates",
+      pendingStatus: "PENDING",
+      processingStatus: "PROCESSING",
+      successStatus: "SUCCESS",
+      failureStatus: "FAILURE",
     },
   },
   create: {
