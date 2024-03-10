@@ -36,6 +36,8 @@ class InferenceJobFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     model = factory.SubFactory(InferenceModelFactory)
     lot = factory.SubFactory(LotFactory)
+    latitude = factory.Faker('pyfloat')
+    longitude = factory.Faker('pyfloat')
 
     class Meta:
         model = InferenceJob
