@@ -133,15 +133,16 @@ export const Api = {
   deleteLot: (id: number) => apiClient.delete(`/api/lots/${id}/`),
   retrieveTotalNumberOfLots: () => apiClient.get(`/api/lots/total/`),
 
-  listInferences: () => apiClient.get(`/api/inferences/`),
+  listInferences: () => apiClient.get(`/api/inferencejobs/`),
   createInference: (data) =>
-    apiClient.post(`/api/inferences/`, data, {
+    apiClient.post(`/api/inferencejobs/`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     }),
-  retrieveInference: (id: number) => apiClient.get(`/api/inferences/${id}/`),
-  deleteInference: (id: number) => apiClient.delete(`/api/inferences/${id}/`),
+  retrieveInference: (id: number) => apiClient.get(`/api/inferencejobs/${id}/`),
+  deleteInference: (id: number) =>
+    apiClient.delete(`/api/inferencejobs/${id}/`),
   retrieveTotalNumberOfInferences: () =>
     apiClient.get(`/api/inferencejobs/total/`),
 };
