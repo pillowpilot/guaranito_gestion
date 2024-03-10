@@ -3,7 +3,13 @@ import { Chip, Typography, Stack } from "@mui/material";
 import Dms from "geodesy/dms";
 
 const CoordinateCell = ({ lat, lon }) => {
-  if (lat === undefined || lon === undefined) return <span>No data</span>;
+  const { t } = useTranslation();
+  if (lat === undefined || lon === undefined)
+    return (
+      <Typography variant="body">
+        {t("inferences.list.labels.noCoords")}
+      </Typography>
+    );
   return (
     <Stack>
       <Typography variant="body">{Dms.toLat(lat, "dms", 2)}</Typography>

@@ -16,6 +16,9 @@ const t = {
       status: "Estado",
       actions: "Acciones",
     },
+    labels: {
+      noCoords: "Sin coordenadas",
+    },
   },
   create: {
     header: "Nueva Inferencia",

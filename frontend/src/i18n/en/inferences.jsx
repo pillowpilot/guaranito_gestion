@@ -16,6 +16,9 @@ const t = {
       status: "Status",
       actions: "Actions",
     },
+    labels: {
+      noCoords: "No coordenates",
+    },
   },
   create: {
     header: "New Inference",
