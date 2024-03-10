@@ -1,5 +1,6 @@
 import factory
 from accounts.factories import UserFactory
+from management.factories import LotFactory
 from inference.models import InferenceModel, InferenceJob
 
 
@@ -34,6 +35,7 @@ class InferenceJobFactory(factory.django.DjangoModelFactory):
 
     user = factory.SubFactory(UserFactory)
     model = factory.SubFactory(InferenceModelFactory)
+    lot = factory.SubFactory(LotFactory)
 
     class Meta:
         model = InferenceJob
