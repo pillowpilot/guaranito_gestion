@@ -5,6 +5,15 @@ from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import CustomDjangoModelPermissions, CreatingAsOneself
 from inference.models import InferenceModel, InferenceJob
 from inference.serializers import InferenceModelSerializer, InferenceJobSerializer
+from inference.services.gps import extract_coordinates, Coordinates
+from inference.services.yolo_inference import (
+    YOLOInferenceResult,
+    LeavesClassNames,
+    FruitsClassNames,
+    perform_fruits_diseases_inference,
+    perform_leaves_diseases_inference,
+    draw_yolo_boxes_on_image,
+)
 
 
 class InferenceModelViewSet(viewsets.ReadOnlyModelViewSet):
@@ -47,6 +56,54 @@ class InferenceJobViewSet(
             return InferenceJob.objects.filter(user__company=company)
         else:
             return InferenceJob.objects.none()
+
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+
+        job = serializer.instance
+
+        job.status = "processing"
+        job.save()
+
+        image_filepath = job.image.path
+        print(image_filepath)
+        coords: Coordinates = extract_coordinates(image_filepath)
+        if coords:
+            job.latitude = coords.latitude
+            job.longitude = coords.longitude
+            job.save()
+
+        results: YOLOInferenceResult | None = None
+        class_names: LeavesClassNames | FruitsClassNames | None = None
+
+        model = job.model
+        if model.name == "leafs":
+            results = perform_leaves_diseases_inference(image_filepath)
+            class_names = LeavesClassNames()
+            if results:
+                job.status = "success"
+            else:
+                job.status = "failure"
+
+        elif model.name == "fruits":
+            results = perform_fruits_diseases_inference(image_filepath)
+            class_names = FruitsClassNames()
+            if results:
+                job.status = "success"
+            else:
+                job.status = "failure"
+
+        elif model.name == "trees":
+            job.status = "failure"
+
+        else:
+            job.status = "failure"
+        job.save()
+
+        if results and class_names:
+            draw_yolo_boxes_on_image(
+                image_filepath, results, class_names.generate_class_name_list()
+            )
 
     def perform_destroy(self, instance):
         """
