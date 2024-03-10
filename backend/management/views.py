@@ -63,16 +63,16 @@ class ParcelViewSet(viewsets.ModelViewSet):
         """
         instance.is_active = False
 
-        # lots = instance.lot_set.all()
-        # for lot in lots:
-        #     lot.is_active = False
+        lots = instance.lot_set.all()
+        for lot in lots:
+            lot.is_active = False
 
-        #     inferences = lot.inferencejob_set.filter(is_active=True)
-        #     for inference in inferences:
-        #         inference.is_active = False
-        #         inference.save()
+            # inferences = lot.inferencejob_set.filter(is_active=True)
+            # for inference in inferences:
+            #     inference.is_active = False
+            #     inference.save()
 
-        #     lot.save()
+            lot.save()
 
         instance.save()
 

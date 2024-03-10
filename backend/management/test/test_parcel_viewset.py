@@ -4,8 +4,8 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from accounts.models import User
 from accounts.factories import CompanyFactory
-from management.models import Parcel
-from management.factories import ParcelFactory
+from management.models import Parcel, Lot
+from management.factories import ParcelFactory, LotFactory
 
 
 class TestParcelViewset(APITestCase):
@@ -138,3 +138,23 @@ class TestParcelViewset(APITestCase):
         self.assertEqual(
             len(Parcel.objects.filter(is_active=True)), response.data["total"]
         )
+
+    def test_delete_parcel_deletes_lots(self):
+        c = CompanyFactory.create()
+        p = ParcelFactory.create(company=c)
+        ls = LotFactory.create_batch(10, parcel=p)
+
+        m = User.objects.create_company_user(email="u@c", password="strong", company=c)
+
+        token_url = reverse("token_obtain_pair")
+        response = self.client.post(
+            token_url, data={"email": "u@c", "password": "strong"}
+        )
+        token = response.data["access"]
+
+        url = reverse("parcel-detail", kwargs={"pk": p.id})
+        self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {token}")
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        for lot in ls:
+            self.assertFalse(Lot.objects.get(id=lot.id).is_active)
