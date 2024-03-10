@@ -1,6 +1,4 @@
-import { useState, useEffect } from "react";
 import {
-  Button,
   Grid,
   MenuItem,
   Paper,
@@ -96,19 +94,17 @@ const InferenceForm = () => {
                 select
                 label={t("inferences.create.labels.inferenceModel")}
                 {...register("model", { required: "model required" })}
-                error={errors.model}
+                error={!!errors.model}
                 helperText={errors.model?.message}
-                defaultValue={"leaves"}
+                defaultValue={(() => {
+                  const data = listModels.data;
+                  if (data.length > 0) return data[0].id;
+                  else return "";
+                })()}
               >
-                <MenuItem value={"leaves"}>
-                  {t("inferences.create.options.leavesDiseases")}
-                </MenuItem>
-                <MenuItem value={"fruits"}>
-                  {t("inferences.create.options.fruitsDiseases")}
-                </MenuItem>
-                <MenuItem value={"tree_counting"}>
-                  {t("inferences.create.options.treeCounting")}
-                </MenuItem>
+                {listModels.data.map((model) => {
+                  return <MenuItem value={model.id}>{model.name}</MenuItem>;
+                })}
               </TextField>
 
               <TextField
