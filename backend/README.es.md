@@ -2,20 +2,20 @@
 
 ## Introducción a Django
 
-Una aplicación de Django esta compuesto de aplicaciones o *apps*. En nuetro caso disponemos de las siguientes *apps*:
+Una aplicación de Django esta compuesto de aplicaciones o _apps_. En nuetro caso disponemos de las siguientes _apps_:
 
 - `inference` deals with the storage and application of AI models.
 - `reporting` deals with the generation of reports (PDFs).
 - `geodata` deals with the storage and serving of geojson files.
-- `s3_storage` se encarga de la generación de urls prefirmadas al *bucket* en S3.
+- `s3_storage` se encarga de la generación de urls prefirmadas al _bucket_ en S3.
 - `accounts` se encarga de la autenticación (manejo de credenciales) e autorización (manejo de permisos) del sistema.
 - `management` es la aplicación principal del projecto y se encarga de la lógica de negocios propia del sistema.
 
-Cada *app* es razonablemente independiente y reutilizable.
+Cada _app_ es razonablemente independiente y reutilizable.
 
 ## Apps
 
-La estructura de archivos de cada *app* sigue el siguiente patron:
+La estructura de archivos de cada _app_ sigue el siguiente patron:
 
 ```bash
 .
@@ -38,7 +38,9 @@ Vea: [Django Project Structure - A comprehensive guide](https://medium.com/djang
 
 ## Configuración
 
-Luego de desplegar el *backend* es necesario aplicar las migraciones sobre la base de datos (esto crea las tablas necesarias). Para ello ejecutamos: `python3 manage.py migrate`. Luego es necesario crear los grupos: `company_manager` y `company_user`. Esto se logra mediante el comando: `python3 manage.py create_default_groups`.
+Luego de desplegar el _backend_ es necesario aplicar las migraciones sobre la base de datos (esto crea las tablas necesarias). Para ello ejecutamos: `python3 manage.py migrate`. Luego es necesario crear los grupos: `company_manager` y `company_user`. Esto se logra mediante el comando: `python3 manage.py create_default_groups`.
+
+También es necesario ejecutar el comando `python3 manage.py create_default_inference_models` para crear los tres primeros modelos de inferencia: "Enfermedades en Hojas", "Enfermedades en Frutas" y "Conteo de Árboles".
 
 ## Notes on django.urls.reverse
 
