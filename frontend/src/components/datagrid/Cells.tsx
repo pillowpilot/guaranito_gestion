@@ -18,16 +18,34 @@ const CoordinateCell = ({ lat, lon }) => {
   );
 };
 
-const StatusCell = ({ status }) => {
-  const getColors = (st) => {
+type StatusValues =
+  | "SUCCESS"
+  | "EXITO"
+  | "PENDING"
+  | "PENDIENTE"
+  | "PROCESSING"
+  | "PROCESANDO"
+  | "FAILURE"
+  | "FRACASO";
+
+interface StatusCellProps {
+  status: StatusValues;
+}
+
+const StatusCell = ({ status }: StatusCellProps) => {
+  const getColors = (st: StatusValues) => {
     // TODO Improve this!
     switch (st) {
-      case "SUCCESS" | "EXITO":
+      case "SUCCESS":
+      case "EXITO":
         return { color: "#0d6832", backgroundColor: "#d6f0e0" };
-      case "PENDING" | "PENDIENTE":
-      case "PROCESSING" | "PROCESANDO":
+      case "PENDING":
+      case "PENDIENTE":
+      case "PROCESSING":
+      case "PROCESANDO":
         return { color: "#73510d", backgroundColor: "#fbf0da" };
-      case "FAILURE" | "FRACASO":
+      case "FAILURE":
+      case "FRACASO":
         return { color: "white", backgroundColor: "red" };
     }
   };
@@ -37,7 +55,7 @@ const StatusCell = ({ status }) => {
       size="small"
       sx={{
         ...getColors(status),
-        width: "100px",
+        width: "130px",
         fontWeight: "bold",
       }}
     />
