@@ -33,6 +33,7 @@ class InferenceJobSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "user_email",
+            "lot",
             "model",
             "model_codename",
             "image",
