@@ -16,6 +16,7 @@ import { MuiFileInput } from "mui-file-input";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Api } from "../../../api/client";
+import { useListInferenceModels } from "../../../hooks/inference/useListInferenceModels";
 import { BackButton } from "../../../components/buttons/BackButton";
 import { SubmitButton } from "../../../components/buttons/SubmitButton";
 
@@ -31,6 +32,7 @@ const SuccessfullSubmitMessage = ({ flag }) => {
 const InferenceForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const listModels = useListInferenceModels();
 
   const formMethods = useForm();
   const {
@@ -78,101 +80,102 @@ const InferenceForm = () => {
     }
   };
 
-  if (listLotsQuery.isLoading) return <p>Loading...</p>;
-  if (listLotsQuery.isError) return <p>Error :(</p>;
-
-  const lots = listLotsQuery.data.data.results;
-  return (
-    <Paper
-      sx={{
-        padding: 5,
-      }}
-    >
-      <Stack spacing={5}>
-        <Typography variant="h4">{t("inferences.create.header")}</Typography>
-        <form onSubmit={handleSubmit(onSubmitHandler)}>
-          <Stack spacing={5}>
-            <TextField
-              select
-              label={t("inferences.create.labels.inferenceModel")}
-              {...register("model", { required: "model required" })}
-              error={errors.model}
-              helperText={errors.model?.message}
-              defaultValue={"leaves"}
-            >
-              <MenuItem value={"leaves"}>
-                {t("inferences.create.options.leavesDiseases")}
-              </MenuItem>
-              <MenuItem value={"fruits"}>
-                {t("inferences.create.options.fruitsDiseases")}
-              </MenuItem>
-              <MenuItem value={"tree_counting"}>
-                {t("inferences.create.options.treeCounting")}
-              </MenuItem>
-            </TextField>
-
-            <TextField
-              select
-              label={t("inferences.create.labels.lot")}
-              {...register("lot", {
-                required: "inferences.create.errors.requiredLot",
-              })}
-              error={!!errors.lot}
-              helperText={errors.lot?.message}
-              defaultValue={lots.length > 0 ? lots[0].id : ""}
-            >
-              {lots.map((lot) => (
-                <MenuItem key={lot.id} value={lot.id}>
-                  {lot.name}
+  if (listLotsQuery.isSuccess && listModels.isSuccess) {
+    const lots = listLotsQuery.data.data.results;
+    return (
+      <Paper
+        sx={{
+          padding: 5,
+        }}
+      >
+        <Stack spacing={5}>
+          <Typography variant="h4">{t("inferences.create.header")}</Typography>
+          <form onSubmit={handleSubmit(onSubmitHandler)}>
+            <Stack spacing={5}>
+              <TextField
+                select
+                label={t("inferences.create.labels.inferenceModel")}
+                {...register("model", { required: "model required" })}
+                error={errors.model}
+                helperText={errors.model?.message}
+                defaultValue={"leaves"}
+              >
+                <MenuItem value={"leaves"}>
+                  {t("inferences.create.options.leavesDiseases")}
                 </MenuItem>
-              ))}
-            </TextField>
+                <MenuItem value={"fruits"}>
+                  {t("inferences.create.options.fruitsDiseases")}
+                </MenuItem>
+                <MenuItem value={"tree_counting"}>
+                  {t("inferences.create.options.treeCounting")}
+                </MenuItem>
+              </TextField>
 
-            <Controller
-              name="image"
-              control={control}
-              rules={{
-                required: t("inferences.create.errors.requiredImage"),
-              }}
-              render={({ field, fieldState }) => {
-                console.log("field", field);
-                console.log("fieldState", fieldState);
-                return (
-                  <MuiFileInput
-                    {...field}
-                    label={t("inferences.create.labels.inputImage")}
-                    inputProps={{ accept: "image/*" }}
-                    error={fieldState.invalid}
-                    helperText={
-                      fieldState.invalid ? fieldState.error?.message : ""
-                    }
-                  />
-                );
-              }}
-            />
+              <TextField
+                select
+                label={t("inferences.create.labels.lot")}
+                {...register("lot", {
+                  required: "inferences.create.errors.requiredLot",
+                })}
+                error={!!errors.lot}
+                helperText={errors.lot?.message}
+                defaultValue={lots.length > 0 ? lots[0].id : ""}
+              >
+                {lots.map((lot) => (
+                  <MenuItem key={lot.id} value={lot.id}>
+                    {lot.name}
+                  </MenuItem>
+                ))}
+              </TextField>
 
-            <FormErrorMessage
-              flag={errors.root?.serverError}
-              msg={errors.root?.serverError?.message}
-            />
-
-            <SuccessfullSubmitMessage flag={isSubmitSuccessful} />
-
-            <Stack direction="row" justifyContent="center" gap={1}>
-              <BackButton
-                labelKey="inferences.create.goBackBtn"
-                onClick={() => navigate(-1)}
+              <Controller
+                name="image"
+                control={control}
+                rules={{
+                  required: t("inferences.create.errors.requiredImage"),
+                }}
+                render={({ field, fieldState }) => {
+                  console.log("field", field);
+                  console.log("fieldState", fieldState);
+                  return (
+                    <MuiFileInput
+                      {...field}
+                      label={t("inferences.create.labels.inputImage")}
+                      inputProps={{ accept: "image/*" }}
+                      error={fieldState.invalid}
+                      helperText={
+                        fieldState.invalid ? fieldState.error?.message : ""
+                      }
+                    />
+                  );
+                }}
               />
-              <SubmitButton
-                labelKey="inferences.create.inferBtn"
-                endIcon={<SendIcon />}
+
+              <FormErrorMessage
+                flag={errors.root?.serverError}
+                msg={errors.root?.serverError?.message}
               />
+
+              <SuccessfullSubmitMessage flag={isSubmitSuccessful} />
+
+              <Stack direction="row" justifyContent="center" gap={1}>
+                <BackButton
+                  labelKey="inferences.create.goBackBtn"
+                  onClick={() => navigate(-1)}
+                />
+                <SubmitButton
+                  labelKey="inferences.create.inferBtn"
+                  endIcon={<SendIcon />}
+                />
+              </Stack>
             </Stack>
-          </Stack>
-        </form>
-      </Stack>
-    </Paper>
-  );
+          </form>
+        </Stack>
+      </Paper>
+    );
+  }
+
+  return <p>Loading...</p>;
 };
 
 const InferenceFormPage = () => {
