@@ -4,7 +4,6 @@ import {
   MenuItem,
   Paper,
   Stack,
-  Alert,
   TextField,
   Typography,
 } from "@mui/material";
@@ -22,14 +21,6 @@ import { BackButton } from "../../../components/buttons/BackButton";
 import { SubmitButton } from "../../../components/buttons/SubmitButton";
 import { LoadingForm } from "./LoadingForm";
 
-const FormErrorMessage = ({ flag, msg }) =>
-  flag ? <Alert severity="error">{msg}</Alert> : <></>;
-
-const SuccessfullSubmitMessage = ({ flag }) => {
-  const { t } = useTranslation();
-  if (!flag) return <></>;
-  return <Alert severity="success">{t("inferences.create.successMsg")}</Alert>;
-};
 
 const InferenceForm = () => {
   const { t } = useTranslation();
@@ -87,13 +78,6 @@ const InferenceForm = () => {
       model: d.model,
       lot: d.lot,
     });
-      if (errorsData.model)
-        setError("model", { type: "400", message: errorsData.model });
-      if (errorsData.lot)
-        setError("lot", { type: "400", message: errorsData.lot });
-      if (errorsData.image)
-        setError("image", { type: "400", message: errorsData.image });
-    }
   };
 
   if (listLotsQuery.isSuccess && listModels.isSuccess) {
@@ -166,13 +150,6 @@ const InferenceForm = () => {
                   );
                 }}
               />
-
-              <FormErrorMessage
-                flag={errors.root?.serverError}
-                msg={errors.root?.serverError?.message}
-              />
-
-              <SuccessfullSubmitMessage flag={isSubmitSuccessful} />
 
               <Stack direction="row" justifyContent="center" gap={1}>
                 <BackButton
