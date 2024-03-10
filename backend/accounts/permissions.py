@@ -68,13 +68,13 @@ class CreatingAsOneself(BasePermission):
 
     def has_permission(self, request, view):
         if view.action == "create" and "user" in request.data.keys():
-            authenticated_user = request.user
+            authenticated_user_id = request.user.id
             try:
-                to_create_user = int(request.data["user"])
+                to_create_user_id = int(request.data["user"])
             except ValueError:
                 logger.warn(
                     f"Failure to cast request.data['user'] to int at CreatingAsOneself"
                 )
                 return False
-            return authenticated_user == to_create_user
+            return authenticated_user_id == to_create_user_id
         return True
