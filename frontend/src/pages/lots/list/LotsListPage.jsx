@@ -10,7 +10,6 @@ import {
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
 import { useQueryClient, useMutation } from "react-query";
-import { useSnackbar } from "notistack";
 import { useTranslation } from "react-i18next";
 import { Api } from "../../../api/client";
 import { DeleteLotDialog } from "../../../components/dialogs/DeleteInferenceDialog";
@@ -67,8 +66,7 @@ const Actions = () => {
 
 const LotsPage = () => {
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
-  const { notifyError } = useNotification();
+  const { notifySuccess, notifyError } = useNotification();
 
   const [lotId, setLotId] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -81,7 +79,7 @@ const LotsPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(lotsKeys.all);
       queryClient.invalidateQueries(["inferences"]);
-      enqueueSnackbar(t("lots.delete.successMsg"), { variant: "success" });
+      notifySuccess("lots.delete.successMsg");
     },
     onError: (error) => notifyError(error),
   });

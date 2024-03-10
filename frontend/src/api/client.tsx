@@ -81,6 +81,20 @@ interface ListPropertiesResponse {
   results: Property[];
 }
 
+interface Lot {
+  id: number;
+  name: string;
+  property: number;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ListLotsResponse {
+  count: number;
+  previous: string | null;
+  next: string | null;
+  results: Lot[];
+}
 export const Api = {
   login: (data: LoginData) =>
     apiClient.post<LoginResponse>(`/api/token/`, data),
@@ -105,7 +119,7 @@ export const Api = {
   retrieveTotalNumberOfProperties: () => apiClient.get(`/api/parcels/total/`),
   deleteProperty: (id: number) => apiClient.delete(`/api/parcels/${id}/`),
 
-  listLots: () => apiClient.get(`/api/lots/`),
+  listLots: () => apiClient.get<ListLotsResponse>(`/api/lots/`),
   createLot: (data) =>
     apiClient.post(`/api/lots/`, data, {
       headers: {

@@ -10,14 +10,14 @@ const useListLots = () => {
   const listLots = useQuery({
     queryKey: LIST_USERS_QK,
     queryFn: Api.listLots,
-    select: (data) => {
-      const clean = data.data.results?.map((o) => ({
+    select: (response) => {
+      const data = response.data;
+      const clean = data.results.map((o) => ({
         id: o.id,
         name: o.name,
-        property: o.parcel_name,
-        geodata: o.geodata,
-        created_on: o.created_on,
-        updated_on: o.updated_on,
+        property: o.parcel,
+        created_on: o.created_at,
+        updated_on: o.updated_at,
       }));
       return clean;
     },
