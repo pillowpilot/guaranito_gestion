@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from accounts.models import User
+from management.models import Lot
 
 
 class InferenceModel(models.Model):
@@ -30,6 +31,7 @@ class InferenceJob(models.Model):
     """
 
     user = models.ForeignKey(User, on_delete=models.RESTRICT)
+    lot = models.ForeignKey(Lot, on_delete=models.RESTRICT)
     model = models.ForeignKey(InferenceModel, on_delete=models.RESTRICT)
     image = models.ImageField(upload_to="inference_jobs_images", null=True)
     is_active = models.BooleanField(default=True)

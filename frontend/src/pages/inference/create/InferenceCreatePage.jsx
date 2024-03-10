@@ -76,7 +76,7 @@ const InferenceForm = () => {
       user: auth.id,
       image: d.image,
       model: d.model,
-      lot: d.lot,
+      lot: Number(d.lot), // TODO Move typecasting to GET hook
     });
   };
 
