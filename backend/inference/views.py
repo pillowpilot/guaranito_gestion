@@ -12,7 +12,7 @@ class InferenceModelViewSet(viewsets.ReadOnlyModelViewSet):
     Inference Models viewset
     """
 
-    queryset = InferenceModel.objects.all()
+    queryset = InferenceModel.objects.filter(is_active=True)
     serializer_class = InferenceModelSerializer
     permission_classes = [IsAuthenticated]
 
