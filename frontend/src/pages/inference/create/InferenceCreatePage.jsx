@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   Grid,
   MenuItem,
@@ -9,11 +10,13 @@ import {
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useForm, Controller } from "react-hook-form";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import { MuiFileInput } from "mui-file-input";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Api } from "../../../api/client";
+import AuthContext from "../../../contexts/AuthProvider";
+import { useNotification } from "../../../hooks/useNotification";
 import { useListInferenceModels } from "../../../hooks/inference/useListInferenceModels";
 import { BackButton } from "../../../components/buttons/BackButton";
 import { SubmitButton } from "../../../components/buttons/SubmitButton";
@@ -32,6 +35,8 @@ const InferenceForm = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const listModels = useListInferenceModels();
+  const { auth } = useContext(AuthContext);
+  const { notifySuccess, notifyError } = useNotification();
 
   const formMethods = useForm();
   const {
@@ -39,7 +44,7 @@ const InferenceForm = () => {
     handleSubmit,
     setError,
     control,
-    formState: { errors, isSubmitSuccessful },
+    formState: { errors },
   } = formMethods;
 
   const listLotsQuery = useQuery({
@@ -56,20 +61,32 @@ const InferenceForm = () => {
     },
   });
 
-  const onSubmitHandler = async (data) => {
-    try {
-      await Api.createInference({
-        image: data.image,
-        model: data.model,
-        lot: data.lot,
-      });
-    } catch (err) {
-      const errorsData = err.response.data;
-      if (errorsData.detail)
-        setError("root.serverError", {
-          type: "400",
-          message: errorsData.detail,
-        });
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (data) => Api.createInference(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["inferences"]);
+      notifySuccess("inferences.create.successMsg");
+    },
+    onError: (error) => {
+      notifyError(error);
+
+      if (error.response) {
+        const data = error.response.data;
+        if (data.model) setError("model", { type: "400", message: data.model });
+        if (data.lot) setError("lot", { type: "400", message: data.lot });
+        if (data.image) setError("image", { type: "400", message: data.image });
+      }
+    },
+  });
+
+  const onSubmitHandler = (d) => {
+    mutation.mutate({
+      user: auth.id,
+      image: d.image,
+      model: d.model,
+      lot: d.lot,
+    });
       if (errorsData.model)
         setError("model", { type: "400", message: errorsData.model });
       if (errorsData.lot)
@@ -94,7 +111,9 @@ const InferenceForm = () => {
               <TextField
                 select
                 label={t("inferences.create.labels.inferenceModel")}
-                {...register("model", { required: t("inferences.create.errors.requiredModel") })}
+                {...register("model", {
+                  required: t("inferences.create.errors.requiredModel"),
+                })}
                 error={!!errors.model}
                 helperText={errors.model?.message}
                 defaultValue={(() => {
