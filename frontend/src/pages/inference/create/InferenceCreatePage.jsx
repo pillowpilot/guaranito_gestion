@@ -16,6 +16,8 @@ import { MuiFileInput } from "mui-file-input";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Api } from "../../../api/client";
+import { BackButton } from "../../../components/buttons/BackButton";
+import { SubmitButton } from "../../../components/buttons/SubmitButton";
 
 const FormErrorMessage = ({ flag, msg }) =>
   flag ? <Alert severity="error">{msg}</Alert> : <></>;
@@ -157,21 +159,14 @@ const InferenceForm = () => {
             <SuccessfullSubmitMessage flag={isSubmitSuccessful} />
 
             <Stack direction="row" justifyContent="center" gap={1}>
-              <Button
-                variant="outlined"
-                size="medium"
+              <BackButton
+                labelKey="inferences.create.goBackBtn"
                 onClick={() => navigate(-1)}
-              >
-                {t("inferences.create.goBackBtn")}
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                size="medium"
+              />
+              <SubmitButton
+                labelKey="inferences.create.inferBtn"
                 endIcon={<SendIcon />}
-              >
-                {t("inferences.create.inferBtn")}
-              </Button>
+              />
             </Stack>
           </Stack>
         </form>
