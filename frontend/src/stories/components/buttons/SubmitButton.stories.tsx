@@ -1,4 +1,5 @@
 import { SubmitButton } from "../../../components/buttons/SubmitButton";
+import SendIcon from "@mui/icons-material/Send";
 
 export default {
   title: "Components/SubmitButton",
@@ -8,4 +9,8 @@ export default {
 
 export const Primary = {
   args: { labelKey: "properties.create.saveBtn" },
+};
+
+export const WithEndIcon = {
+  args: { labelKey: "properties.create.saveBtn", endIcon: <SendIcon /> },
 };
