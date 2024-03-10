@@ -1,7 +1,6 @@
 import { useQuery } from "react-query";
 import { useNotification } from "../useNotification";
 import { Api } from "../../api/client";
-import { capitalizeEachWord } from "../../utils/utils";
 
 const LIST_INFERENCE_QK = ["inferences"];
 
@@ -14,20 +13,21 @@ const useListInferences = () => {
   const listInferences = useQuery({
     queryKey: LIST_INFERENCE_QK,
     queryFn: Api.listInferences,
-    select: (data) => {
-      const clean = data.data.results.map((o) => ({
-        id: o.id,
-        user_name: o.user?.email,
-        lot_name: o.lot_name,
-        date: o.created_on,
-        updated_on: o.updated_on,
-        model: capitalizeEachWord(o.model),
-        task_id: o.task_id,
-        status: capitalizeEachWord(o.status),
-        coords:
-          o.latitude !== null && o.longitude != null
-            ? { lat: o.latitude, lon: o.longitude }
-            : null,
+    select: (response) => {
+      const results = response.data.results;
+      const clean = results.map((job) => ({
+        id: job.id,
+        user_name: job.user,
+        lot_name: "",
+        date: job.created_at,
+        updated_on: job.updated_at,
+        model: "",
+        task_id: "",
+        status: "",
+        coords: "",
+        // job.latitude !== null && job.longitude != null
+        //   ? { lat: job.latitude, lon: job.longitude }
+        //   : null,
       }));
       return clean;
     },

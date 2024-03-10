@@ -110,6 +110,22 @@ interface ListInferenceModelsResponse {
   results: InferenceModel[];
 }
 
+interface InferenceJob {
+  id: number;
+  user: number;
+  model: number;
+  image: null | string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ListInferenceJobsResponse {
+  count: number;
+  previous: string | null;
+  next: string | null;
+  results: InferenceJob[];
+}
+
 export const Api = {
   login: (data: LoginData) =>
     apiClient.post<LoginResponse>(`/api/token/`, data),
@@ -151,7 +167,8 @@ export const Api = {
   listInferenceModels: () =>
     apiClient.get<ListInferenceModelsResponse>(`/api/inferencemodels/`),
 
-  listInferences: () => apiClient.get(`/api/inferencejobs/`),
+  listInferences: () =>
+    apiClient.get<ListInferenceJobsResponse>(`/api/inferencejobs/`),
   createInference: (data) =>
     apiClient.post(`/api/inferencejobs/`, data, {
       headers: {
