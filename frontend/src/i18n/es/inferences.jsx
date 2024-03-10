@@ -26,6 +26,11 @@ const t = {
       fruitsDiseases: "Enfermedades de Frutas",
       treeCounting: "Conteo de árboles",
     },
+    errors: {
+      requiredImage: "Imagen de entrada es requerida",
+      requiredLot: "Lote es requerido",
+      requiredModel: "Model de inferencia es requerido",
+    },
     labels: {
       inferenceModel: "Modelo de inferencia",
       lot: "Lote",
@@ -33,7 +38,7 @@ const t = {
     },
     successMsg: "Inferencia creada exitosamente",
     errorMsg: "Error creando inferencia",
-    noLotsErrorMsg: "Error obteniendo lotes. Cree al menos un lote."
+    noLotsErrorMsg: "Error obteniendo lotes. Cree al menos un lote.",
   },
   details: {
     goBackBtn: "Volver",
@@ -44,16 +49,17 @@ const t = {
       status: "Estado",
       createdOn: "Creado el",
       updatedOn: "Actualizado el",
-      previewHeader: "Visualización"
-    }
+      previewHeader: "Visualización",
+    },
   },
   delete: {
-    confirmationMsg: "Eliminar los datos de la inferencia? Esto no se puede deshacer.",
+    confirmationMsg:
+      "Eliminar los datos de la inferencia? Esto no se puede deshacer.",
     successMsg: "Inferencia eliminada exitosamente",
     errorMsg: "Error eliminando inferencia",
     goBackBtn: "Volver",
     deleteBtn: "Eliminar",
-  }
+  },
 };
 
 export default t;

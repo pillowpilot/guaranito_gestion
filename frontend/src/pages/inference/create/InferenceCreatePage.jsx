@@ -93,7 +93,7 @@ const InferenceForm = () => {
               <TextField
                 select
                 label={t("inferences.create.labels.inferenceModel")}
-                {...register("model", { required: "model required" })}
+                {...register("model", { required: t("inferences.create.errors.requiredModel") })}
                 error={!!errors.model}
                 helperText={errors.model?.message}
                 defaultValue={(() => {
@@ -111,7 +111,7 @@ const InferenceForm = () => {
                 select
                 label={t("inferences.create.labels.lot")}
                 {...register("lot", {
-                  required: "inferences.create.errors.requiredLot",
+                  required: t("inferences.create.errors.requiredLot"),
                 })}
                 error={!!errors.lot}
                 helperText={errors.lot?.message}

@@ -26,6 +26,11 @@ const t = {
       lot: "Lot",
       inputImage: "Input Image",
     },
+    errors: {
+      requiredImage: "Input image is required",
+      requiredLot: "Lot is required",
+      requiredModel: "Inference model is required",
+    },
     options: {
       leavesDiseases: "Leaves Diseases",
       fruitsDiseases: "Fruits Diseases",
@@ -45,7 +50,7 @@ const t = {
       createdOn: "Created On",
       updatedOn: "Updated On",
       previewHeader: "Preview",
-    }
+    },
   },
   delete: {
     confirmationMsg: "Delete the inference data? This cannot be undone.",
@@ -53,7 +58,7 @@ const t = {
     errorMsg: "Error deleting inference",
     goBackBtn: "Go back",
     deleteBtn: "Delete",
-  }
+  },
 };
 
 export default t;
