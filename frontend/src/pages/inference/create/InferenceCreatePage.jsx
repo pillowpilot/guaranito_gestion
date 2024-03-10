@@ -42,7 +42,6 @@ const InferenceForm = () => {
     queryKey: "lots",
     queryFn: Api.listLots,
     onSuccess: (data) => {
-      console.log(data);
       const results = data.data?.results;
       if (results.length == 0)
         setError("lot", {
@@ -135,8 +134,8 @@ const InferenceForm = () => {
                   required: t("inferences.create.errors.requiredImage"),
                 }}
                 render={({ field, fieldState }) => {
-                  console.log("field", field);
-                  console.log("fieldState", fieldState);
+                  // console.log("field", field);
+                  // console.log("fieldState", fieldState);
                   return (
                     <MuiFileInput
                       {...field}

@@ -25,7 +25,7 @@ const useListInferences = () => {
         date: job.created_at,
         updated_on: job.updated_at,
         model: displayModelName(job.model_codename),
-        task_id: "",
+        task_id: "", // TODO Remove (unused)
         status: displayStatus(job.status),
         coords:
           job.latitude !== null && job.longitude !== null
