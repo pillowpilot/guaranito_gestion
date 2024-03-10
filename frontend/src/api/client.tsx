@@ -95,6 +95,21 @@ interface ListLotsResponse {
   next: string | null;
   results: Lot[];
 }
+
+interface InferenceModel {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
+interface ListInferenceModelsResponse {
+  count: number;
+  previous: string | null;
+  next: string | null;
+  results: InferenceModel[];
+}
+
 export const Api = {
   login: (data: LoginData) =>
     apiClient.post<LoginResponse>(`/api/token/`, data),
@@ -132,6 +147,9 @@ export const Api = {
     apiClient.patch(`/api/lots/${id}/`, data),
   deleteLot: (id: number) => apiClient.delete(`/api/lots/${id}/`),
   retrieveTotalNumberOfLots: () => apiClient.get(`/api/lots/total/`),
+
+  listInferenceModels: () =>
+    apiClient.get<ListInferenceModelsResponse>(`/api/inferencemodels/`),
 
   listInferences: () => apiClient.get(`/api/inferencejobs/`),
   createInference: (data) =>
