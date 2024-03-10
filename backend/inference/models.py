@@ -34,6 +34,8 @@ class InferenceJob(models.Model):
     lot = models.ForeignKey(Lot, on_delete=models.RESTRICT)
     model = models.ForeignKey(InferenceModel, on_delete=models.RESTRICT)
     image = models.ImageField(upload_to="inference_jobs_images", null=True)
+    latitude = models.FloatField(null=True)
+    longitude = models.FloatField(null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(_("date created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("date updated"), auto_now=True)
@@ -46,6 +48,6 @@ class InferenceJob(models.Model):
 
     def __repr__(self) -> str:
         if self.is_active:
-            return f"InferenceJob(user={self.user}, model={self.model})"
+            return f"InferenceJob(user={self.user}, model={self.model}, latitude={self.latitude}, longitude={self.longitude})"
         else:
-            return f"InferenceJob(user={self.user}, model={self.model}, is_active={self.is_active})"
+            return f"InferenceJob(user={self.user}, model={self.model}, is_active={self.is_active}, latitude={self.latitude}, longitude={self.longitude})"

@@ -119,6 +119,8 @@ interface InferenceJob {
   model: number;
   model_codename: "leafs" | "fruits" | "trees";
   image: null | string;
+  latitude: null | number;
+  longitude: null | number;
   created_at: string;
   updated_at: string;
 }

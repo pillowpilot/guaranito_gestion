@@ -27,10 +27,10 @@ const useListInferences = () => {
         model: displayModelName(job.model_codename),
         task_id: "",
         status: "",
-        coords: "",
-        // job.latitude !== null && job.longitude != null
-        //   ? { lat: job.latitude, lon: job.longitude }
-        //   : null,
+        coords:
+          job.latitude !== null && job.longitude !== null
+            ? { lat: job.latitude, lon: job.longitude }
+            : null,
       }));
       return clean;
     },
