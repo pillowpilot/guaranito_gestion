@@ -60,6 +60,11 @@ const t = {
     goBackBtn: "Volver",
     deleteBtn: "Eliminar",
   },
+  models: {
+    leafs: "Enfermedades en Hojas",
+    fruits: "Enfermedades en Frutas",
+    trees: "Conteo de Árboles",
+  },
 };
 
 export default t;

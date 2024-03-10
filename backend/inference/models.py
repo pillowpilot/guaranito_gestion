@@ -31,6 +31,7 @@ class InferenceJob(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.RESTRICT)
     model = models.ForeignKey(InferenceModel, on_delete=models.RESTRICT)
+    image = models.ImageField(upload_to="inference_jobs_images", null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(_("date created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("date updated"), auto_now=True)

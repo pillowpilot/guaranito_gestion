@@ -59,6 +59,11 @@ const t = {
     goBackBtn: "Go back",
     deleteBtn: "Delete",
   },
+  models: {
+    leafs: "Leaves Diseases",
+    fruits: "Fruits Diseases",
+    trees: "Tree Counting",
+  },
 };
 
 export default t;

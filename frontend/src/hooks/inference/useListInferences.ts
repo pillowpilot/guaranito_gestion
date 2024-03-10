@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import { useNotification } from "../useNotification";
 import { Api } from "../../api/client";
+import { useInferenceJobUtils } from "./useInferenceJobUtils";
 
 const LIST_INFERENCE_QK = ["inferences"];
 
@@ -10,6 +11,8 @@ const LIST_INFERENCE_QK = ["inferences"];
 const useListInferences = () => {
   const { notifyError } = useNotification();
 
+  const { displayModelName } = useInferenceJobUtils();
+
   const listInferences = useQuery({
     queryKey: LIST_INFERENCE_QK,
     queryFn: Api.listInferences,
@@ -17,11 +20,11 @@ const useListInferences = () => {
       const results = response.data.results;
       const clean = results.map((job) => ({
         id: job.id,
-        user_name: job.user,
+        user_name: job.user_email,
         lot_name: "",
         date: job.created_at,
         updated_on: job.updated_at,
-        model: "",
+        model: displayModelName(job.model_codename),
         task_id: "",
         status: "",
         coords: "",

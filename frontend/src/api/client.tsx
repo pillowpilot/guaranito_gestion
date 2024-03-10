@@ -113,7 +113,9 @@ interface ListInferenceModelsResponse {
 interface InferenceJob {
   id: number;
   user: number;
+  user_email: string;
   model: number;
+  model_codename: "leafs" | "fruits" | "trees";
   image: null | string;
   created_at: string;
   updated_at: string;

@@ -23,8 +23,19 @@ class InferenceJobSerializer(serializers.ModelSerializer):
     """
 
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    user_email = serializers.CharField(source="user.email", read_only=True)
     model = serializers.PrimaryKeyRelatedField(queryset=InferenceModel.objects.all())
+    model_codename = serializers.CharField(source="model.name", read_only=True)
 
     class Meta:
         model = InferenceJob
-        fields = ["id", "user", "model", "created_at", "updated_at"]
+        fields = [
+            "id",
+            "user",
+            "user_email",
+            "model",
+            "model_codename",
+            "image",
+            "created_at",
+            "updated_at",
+        ]
