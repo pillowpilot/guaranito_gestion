@@ -22,11 +22,11 @@ const useInferenceJobUtils = () => {
       case "pending":
         return t("inferences.list.labels.pendingStatus");
       case "processing":
-        return t("inference.list.labels.processingStatus");
+        return t("inferences.list.labels.processingStatus");
       case "success":
-        return t("inference.list.labels.successStatus");
+        return t("inferences.list.labels.successStatus");
       case "failure":
-        return t("inference.list.labels.successStatus");
+        return t("inferences.list.labels.successStatus");
     }
   };
 
