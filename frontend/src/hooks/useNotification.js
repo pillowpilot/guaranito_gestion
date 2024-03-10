@@ -18,8 +18,12 @@ const useNotification = () => {
    */
   const notifyError = (error) => {
     if (error.response) {
-      const data = error.response.data;
-      if (data.detail) enqueueSnackbar(data.detail, { variant: "error" });
+      if (error.response.status >= 500) {
+        enqueueSnackbar(t("errors.unknown.default"), { variant: "error" }); // TODO Add server error dedicated message
+      } else {
+        const data = error.response.data;
+        if (data.detail) enqueueSnackbar(data.detail, { variant: "error" });
+      }
     } else if (error.request) {
       enqueueSnackbar(t("errors.network.default"), { variant: "error" });
     } else {
@@ -30,7 +34,7 @@ const useNotification = () => {
   /**
    * Shows a snackbar with a custom success message.
    * Expects an i18n key. See src/i18n.
-   * 
+   *
    * @param {string} key i18n key to display. Eg: users.create.successMsg
    */
   const notifySuccess = (key) => {
