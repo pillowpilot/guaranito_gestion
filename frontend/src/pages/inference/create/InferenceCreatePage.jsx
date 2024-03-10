@@ -17,6 +17,7 @@ import { Api } from "../../../api/client";
 import { useListInferenceModels } from "../../../hooks/inference/useListInferenceModels";
 import { BackButton } from "../../../components/buttons/BackButton";
 import { SubmitButton } from "../../../components/buttons/SubmitButton";
+import { LoadingForm } from "./LoadingForm";
 
 const FormErrorMessage = ({ flag, msg }) =>
   flag ? <Alert severity="error">{msg}</Alert> : <></>;
@@ -171,7 +172,7 @@ const InferenceForm = () => {
     );
   }
 
-  return <p>Loading...</p>;
+  return <LoadingForm />;
 };
 
 const InferenceFormPage = () => {
