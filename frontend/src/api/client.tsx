@@ -114,6 +114,8 @@ interface InferenceJob {
   id: number;
   user: number;
   user_email: string;
+  lot: number;
+  lot_name: string;
   model: number;
   model_codename: "leafs" | "fruits" | "trees";
   image: null | string;

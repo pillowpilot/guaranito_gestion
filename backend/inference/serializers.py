@@ -24,6 +24,8 @@ class InferenceJobSerializer(serializers.ModelSerializer):
 
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     user_email = serializers.CharField(source="user.email", read_only=True)
+    # lot = serializers.PrimaryKeyRelatedField(queryset=Lot.objects.filter(...)) # TODO add filtering at queryset (this company only)
+    lot_name = serializers.CharField(source="lot.name", read_only=True)
     model = serializers.PrimaryKeyRelatedField(queryset=InferenceModel.objects.all())
     model_codename = serializers.CharField(source="model.name", read_only=True)
 
@@ -34,6 +36,7 @@ class InferenceJobSerializer(serializers.ModelSerializer):
             "user",
             "user_email",
             "lot",
+            "lot_name",
             "model",
             "model_codename",
             "image",

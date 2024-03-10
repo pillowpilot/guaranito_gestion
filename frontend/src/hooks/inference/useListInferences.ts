@@ -21,7 +21,7 @@ const useListInferences = () => {
       const clean = results.map((job) => ({
         id: job.id,
         user_name: job.user_email,
-        lot_name: "",
+        lot_name: job.lot_name,
         date: job.created_at,
         updated_on: job.updated_at,
         model: displayModelName(job.model_codename),
