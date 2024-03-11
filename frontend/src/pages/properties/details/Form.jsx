@@ -5,6 +5,8 @@ import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import AuthContext from "../../../contexts/AuthProvider";
 import { RequiredTextField } from "../../../components/fields/RequiredTextField";
+import { GeodataField } from "../../../components/fields/GeodataField";
+import { NoteIfGeodata } from "../../../components/fields/NoteIfGeodata";
 
 /**
  * Form for property update
@@ -19,11 +21,12 @@ const PropertyForm = ({
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
 
-  const { register, handleSubmit } = formMethods;
+  const { register, handleSubmit, control } = formMethods;
 
   const onSubmit = (d) => {
     mutation.mutate({
       name: d.name,
+      geodata: d.geodata,
       company: auth.company?.id,
     });
   };
@@ -41,16 +44,6 @@ const PropertyForm = ({
       }}
     >
       <Stack spacing={5}>
-        {/* <TextField
-          {...register("name", {
-            required: t("properties.details.errors.requiredName"),
-          })}
-          label={t("properties.details.labels.name")}
-          InputLabelProps={{ shrink: true }}
-          defaultValue={data.name}
-          error={errors.name}
-          helperText={errors.name?.message} /> */}
-
         <RequiredTextField
           register={register}
           name="name"
@@ -60,6 +53,12 @@ const PropertyForm = ({
           errorMsg={errors.name?.message}
           defaultValue={data.name}
         />
+        <GeodataField
+          labelKey="properties.details.labels.geodata"
+          requiredKey="properties.details.errors.requiredGeodata"
+          control={control}
+        />
+        <NoteIfGeodata geodata={data.geodata} />
         <Stack direction="row" justifyContent="center" gap={1}>
           <Button variant="outlined" size="medium" onClick={() => navigate(-1)}>
             {t("properties.details.goBackBtn")}

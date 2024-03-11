@@ -153,7 +153,11 @@ export const Api = {
     }),
   retrieveProperty: (id: number) => apiClient.get(`/api/parcels/${id}/`),
   updateProperty: (id: number, data) =>
-    apiClient.put(`/api/parcels/${id}/`, data),
+    apiClient.put(`/api/parcels/${id}/`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
   retrieveTotalNumberOfProperties: () => apiClient.get(`/api/parcels/total/`),
   deleteProperty: (id: number) => apiClient.delete(`/api/parcels/${id}/`),
 
