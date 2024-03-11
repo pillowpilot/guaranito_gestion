@@ -35,6 +35,8 @@ const t = {
     labels: {
       name: "Nombre",
       property: "Finca",
+      geodata: "Geolocalizacion",
+      geodataFound: "Geolocalizacion encontrada",
     },
     errors: {
       requiredName: "El nombre es obligatorio",

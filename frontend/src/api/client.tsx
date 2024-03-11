@@ -169,7 +169,12 @@ export const Api = {
       },
     }),
   retrieveLot: (id: number) => apiClient.get(`/api/lots/${id}/`),
-  updateLot: (id: number, data) => apiClient.put(`/api/lots/${id}/`, data),
+  updateLot: (id: number, data) =>
+    apiClient.put(`/api/lots/${id}/`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }),
   partiallyUpdateLot: (id: number, data) =>
     apiClient.patch(`/api/lots/${id}/`, data),
   deleteLot: (id: number) => apiClient.delete(`/api/lots/${id}/`),

@@ -1,8 +1,13 @@
 import React from "react";
-import { Button, Stack, TextField, MenuItem } from "@mui/material";
+import { Stack, TextField, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Controller } from "react-hook-form";
 import { useTranslation } from "react-i18next";
+import { RequiredTextField } from "../../../components/fields/RequiredTextField";
+import { GeodataField } from "../../../components/fields/GeodataField";
+import { NoteIfGeodata } from "../../../components/fields/NoteIfGeodata";
+import { BackButton } from "../../../components/buttons/BackButton";
+import { SubmitButton } from "../../../components/buttons/SubmitButton";
 
 const LotForm = ({ data, propertiesData, mutation, formMethods }) => {
   const { t } = useTranslation();
@@ -18,6 +23,7 @@ const LotForm = ({ data, propertiesData, mutation, formMethods }) => {
   const onSubmit = (d) => {
     mutation.mutate({
       name: d.name,
+      geodata: d.geodata,
       parcel: d.property,
     });
   };
@@ -35,15 +41,14 @@ const LotForm = ({ data, propertiesData, mutation, formMethods }) => {
       }}
     >
       <Stack spacing={5}>
-        <TextField
-          {...register("name", {
-            required: t("lots.details.errors.requiredName"),
-          })}
-          label={t("lots.details.labels.name")}
-          InputLabelProps={{ shrink: true }}
+        <RequiredTextField
+          register={register}
+          name="name"
+          labelKey="lots.details.labels.name"
+          requiredKey="lots.details.errors.requiredName"
+          hasServerError={!!errors.name}
+          errorMsg={errors.name?.message}
           defaultValue={data.name}
-          error={errors.name}
-          helperText={errors.name?.message}
         />
         <Controller
           name="property"
@@ -64,13 +69,18 @@ const LotForm = ({ data, propertiesData, mutation, formMethods }) => {
             );
           }}
         ></Controller>
+        <GeodataField
+          labelKey="lots.details.labels.geodata"
+          requiredKey="lots.details.errors.requiredGeodata"
+          control={control}
+        />
+        <NoteIfGeodata geodata={data.geodata} />
         <Stack direction="row" justifyContent="center" gap={1}>
-          <Button variant="outlined" size="medium" onClick={() => navigate(-1)}>
-            {t("lots.details.goBackBtn")}
-          </Button>
-          <Button type="submit" variant="contained">
-            {t("lots.details.saveBtn")}
-          </Button>
+          <BackButton
+            labelKey="lots.details.goBackBtn"
+            onClick={() => navigate(-1)}
+          />
+          <SubmitButton labelKey="lots.details.saveBtn" />
         </Stack>
       </Stack>
     </form>

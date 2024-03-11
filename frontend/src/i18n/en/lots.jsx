@@ -28,13 +28,16 @@ const t = {
     goBackBtn: "Go back",
     createSuccessMsg: "Lot created successfully",
     createErrorMsg: "Error creating lot",
-    noPropertiesErrorMsg: "Error retrieving properties. Create a property first.",
+    noPropertiesErrorMsg:
+      "Error retrieving properties. Create a property first.",
   },
   details: {
     header: "Lot's details",
     labels: {
       name: "Name",
       property: "Property",
+      geodata: "Geodata",
+      geodataFound: "Geodata found",
     },
     errors: {
       requiredName: "Name is required",
@@ -54,7 +57,7 @@ const t = {
   map: {
     header: "Lot map",
     goBackBtn: "Go back",
-  }
+  },
 };
 
 export default t;
