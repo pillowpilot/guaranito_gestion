@@ -33,6 +33,7 @@ const t = {
     labels: {
       name: "Nombre",
       geodata: "Geolocalizacion",
+      geodataFound: "Geolocalizacion encontrada",
     },
     errors: {
       requiredName: "El nombre es obligatorio",
@@ -52,7 +53,7 @@ const t = {
   map: {
     header: "Mapa de la finca",
     goBackBtn: "Volver",
-  }
+  },
 };
 
 export default t;

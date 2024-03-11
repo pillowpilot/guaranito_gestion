@@ -33,6 +33,7 @@ const t = {
     labels: {
       name: "Name",
       geodata: "Geodata",
+      geodataFound: "Geodata found",
     },
     errors: {
       requiredName: "Name is required",
@@ -52,7 +53,7 @@ const t = {
   map: {
     header: "Property map",
     goBackBtn: "Go back",
-  }
+  },
 };
 
 export default t;
