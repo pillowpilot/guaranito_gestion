@@ -25,27 +25,27 @@ const pages = [
   {
     i18n: "topbar.dashboard",
     to: "dashboard",
-    availableFor: ["Manager", "User"],
+    availableFor: ["company_manager", "company_user"],
   },
   {
     i18n: "topbar.users",
     to: "users",
-    availableFor: ["Manager"],
+    availableFor: ["company_manager"],
   },
   {
     i18n: "topbar.properties",
     to: "properties",
-    availableFor: ["Manager", "User"],
+    availableFor: ["company_manager", "company_user"],
   },
   {
     i18n: "topbar.lots",
     to: "lots",
-    availableFor: ["Manager", "User"],
+    availableFor: ["company_manager", "company_user"],
   },
   {
     i18n: "topbar.inferences",
     to: "inference",
-    availableFor: ["Manager", "User"],
+    availableFor: ["company_manager", "company_user"],
   },
 ];
 
