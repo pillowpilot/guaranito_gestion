@@ -20,7 +20,7 @@ import { useListInferenceModels } from "../../../hooks/inference/useListInferenc
 import { BackButton } from "../../../components/buttons/BackButton";
 import { SubmitButton } from "../../../components/buttons/SubmitButton";
 import { LoadingForm } from "./LoadingForm";
-
+import { useInferenceJobUtils } from "../../../hooks/inference/useInferenceJobUtils";
 
 const InferenceForm = () => {
   const { t } = useTranslation();
@@ -28,6 +28,7 @@ const InferenceForm = () => {
   const listModels = useListInferenceModels();
   const { auth } = useContext(AuthContext);
   const { notifySuccess, notifyError } = useNotification();
+  const { displayModelName } = useInferenceJobUtils();
 
   const formMethods = useForm();
   const {
@@ -106,7 +107,7 @@ const InferenceForm = () => {
                 })()}
               >
                 {listModels.data.map((model) => {
-                  return <MenuItem value={model.id}>{model.name}</MenuItem>;
+                  return <MenuItem value={model.id}>{displayModelName(model.name)}</MenuItem>;
                 })}
               </TextField>
 
