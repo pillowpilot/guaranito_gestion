@@ -23,12 +23,10 @@ const useUpdateUser = ({ id, setError }) => {
     onError: (error) => {
       if (error.response) {
         const data = error.response.data;
-        if (data.name) 
-          setError("name", { type: "400", message: data.name });
+        if (data.name) setError("name", { type: "400", message: data.name });
         if (data.lastname)
           setError("lastname", { type: "400", message: data.lastname });
-        if (data.email) 
-          setError("email", { type: "400", message: data.email });
+        if (data.email) setError("email", { type: "400", message: data.email });
         if (data.password)
           setError("password", { type: "400", message: data.password });
       }
@@ -38,14 +36,14 @@ const useUpdateUser = ({ id, setError }) => {
 
   /**
    * Do update
-   * @param {*} formData Updated form data to send
+   * @param {*} d Updated form data to send
    */
-  const doUpdate = (formData) => {
+  const doUpdate = (d) => {
     mutation.mutate({
-      first_name: formData.name,
-      last_name: formData.lastname,
-      email: formData.email,
-      password: formData.password,
+      first_name: d.name,
+      last_name: d.lastname,
+      email: d.email,
+      password: d.password,
       company: auth.company,
     });
   };
@@ -60,7 +58,7 @@ const useUpdateUser = ({ id, setError }) => {
     }),
   };
 
-  return doUpdate;
+  return { doUpdate };
 };
 
 useUpdateUser.propTypes = {
