@@ -14,6 +14,8 @@ from inference.services.yolo_inference import (
     perform_leaves_diseases_inference,
     draw_yolo_boxes_on_image,
 )
+from inference.services.deepforest_inference import perform_tree_counting_inference
+from inference.services.post_inference import cleanup_after_deepforest_inference
 
 
 class InferenceModelViewSet(viewsets.ReadOnlyModelViewSet):
@@ -94,7 +96,11 @@ class InferenceJobViewSet(
                 job.status = "failure"
 
         elif model.name == "trees":
-            job.status = "failure"
+            chain = perform_tree_counting_inference.s(
+                image_filepath
+            ) | cleanup_after_deepforest_inference.s(job.id)
+            chain.delay()
+            job.status = "processing"
 
         else:
             job.status = "failure"
