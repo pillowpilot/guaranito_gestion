@@ -10,7 +10,6 @@ import { useQueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
 import AuthContext from "./contexts/AuthProvider";
-import { Api } from "./api/client";
 import "./i18n/i18n";
 import "./App.css";
 
@@ -60,7 +59,7 @@ const LoginComponent = () => {
 };
 
 function App() {
-  const { auth, setAuth } = useContext(AuthContext);
+  const { auth } = useContext(AuthContext);
   let theme = createTheme();
   theme = responsiveFontSizes(theme);
   console.log(auth);
@@ -179,22 +178,6 @@ function App() {
       element: <NotFoundPage />,
     }
   ]);
-
-  // useEffect(() => {
-  //   const retrieveUserDataFromServer = async () => {
-  //     const data = (await Api.retrieveUser(auth.id)).data;
-  //     setAuth({
-  //       ...auth,
-  //       id: data.id,
-  //       role: data.role,
-  //       company: {
-  //         id: data.company,
-  //       },
-  //     });
-  //   };
-
-  //   if (auth.isAuthenticated) retrieveUserDataFromServer();
-  // }, [auth.isAuthenticated]);
 
   return (
     <ThemeProvider theme={theme}>
