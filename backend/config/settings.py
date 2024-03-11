@@ -14,7 +14,6 @@ envfile = BASE_DIR / ".env"
 assert envfile.exists()
 env.read_env(str(BASE_DIR / ".env"))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -167,3 +166,8 @@ S3_STORAGE_SETTINGS = {
     "AWS_ACCESS_KEY": env("AWS_ACCESS_KEY"),
     "AWS_SECRET_ACCESS_KEY": env("AWS_SECRET_ACCESS_KEY"),
 }
+
+# Celery config
+# Celery
+CELERY_BROKER_URL = "redis://localhost:6379"
+CELERY_RESULT_BACKEND = "redis://localhost:6379"
