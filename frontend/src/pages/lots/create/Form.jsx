@@ -1,9 +1,12 @@
 import React from "react";
-import { Button, Stack, TextField, MenuItem } from "@mui/material";
+import { Stack, TextField, MenuItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Controller } from "react-hook-form";
 import { withTranslation } from "react-i18next";
 import { MuiFileInput } from "mui-file-input";
+import { RequiredTextField } from "../../../components/fields/RequiredTextField";
+import { BackButton } from "../../../components/buttons/BackButton";
+import { SubmitButton } from "../../../components/buttons/SubmitButton";
 
 const Form = ({ t, properties, formMethods, mutation }) => {
   const navigate = useNavigate();
@@ -19,7 +22,7 @@ const Form = ({ t, properties, formMethods, mutation }) => {
     mutation.mutate({
       name: d.name,
       parcel: d.parcel,
-      geodata: d.geodata,
+      // geodata: d.geodata,
     });
   };
 
@@ -33,13 +36,13 @@ const Form = ({ t, properties, formMethods, mutation }) => {
           },
         }}
       >
-        <TextField
-          label={t("lots.create.labels.name")}
-          {...register("name", {
-            required: t("lots.create.errors.requiredName"),
-          })}
-          error={!!errors.name}
-          helperText={errors.name?.message}
+        <RequiredTextField
+          labelKey="lots.create.labels.name"
+          name="name"
+          requiredKey="lots.create.errors.requiredName"
+          register={register}
+          hasServerError={!!errors.name}
+          errorMsg={errors.name?.message}
         />
         <Controller
           name="parcel"
@@ -65,7 +68,7 @@ const Form = ({ t, properties, formMethods, mutation }) => {
           }}
         ></Controller>
 
-        <Controller
+        {/* <Controller
           name="geodata"
           control={control}
           render={({ field, fieldState }) => {
@@ -79,14 +82,13 @@ const Form = ({ t, properties, formMethods, mutation }) => {
               />
             );
           }}
-        />
+        /> */}
         <Stack direction="row" justifyContent="center" gap={1}>
-          <Button variant="outlined" size="medium" onClick={() => navigate(-1)}>
-            {t("lots.create.goBackBtn")}
-          </Button>
-          <Button variant="contained" type="submit">
-            {t("lots.create.saveBtn")}
-          </Button>
+          <BackButton
+            labelKey="lots.create.goBackBtn"
+            onClick={() => navigate(-1)}
+          />
+          <SubmitButton labelKey="lots.create.saveBtn" />
         </Stack>
       </Stack>
     </form>
