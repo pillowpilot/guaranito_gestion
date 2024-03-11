@@ -4,6 +4,10 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Settings for media files (geodata, inference images, etc.)
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 # Read enviromental variables from file
 env = environ.Env()
 envfile = BASE_DIR / ".env"

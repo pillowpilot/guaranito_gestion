@@ -11,6 +11,7 @@ class ParcelSerializer(serializers.ModelSerializer):
     """
 
     company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all())
+    geodata = serializers.FileField(use_url=False)
 
     class Meta(object):
         model = Parcel
@@ -32,6 +33,7 @@ class LotSerializer(serializers.ModelSerializer):
     """
 
     parcel = serializers.PrimaryKeyRelatedField(queryset=Parcel.objects.all())
+    geodata = serializers.FileField(use_url=False)
 
     class Meta(object):
         model = Lot
