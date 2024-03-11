@@ -6,6 +6,8 @@ import { Image } from "mui-image";
 import { Api } from "../../../api/client";
 import { useQuery } from "react-query";
 import { LoadingDetails, LoadingPreview } from "./Loading";
+import { useNotification } from "../../../hooks/useNotification";
+import { useInferenceJobUtils } from "../../../hooks/inference/useInferenceJobUtils";
 
 const PageLayout = ({ details, preview }) => {
   const { t } = useTranslation();
@@ -51,16 +53,36 @@ const DetailsEntry = ({ label, value }) => {
 const Details = ({ data }) => {
   const { t } = useTranslation();
   const tx = (key) => t(`inferences.details.${key}`);
+  const { displayModelName, displayStatus, displayDate } = useInferenceJobUtils();
+  console.log("data", data);
 
   return (
     <Stack gap={1}>
       <Typography variant="h5">{tx("labels.detailsHeader")}</Typography>
       <Stack gap={1} sx={{ paddingLeft: 3 }}>
         <DetailsEntry label={tx("labels.lot")} value={data.lot_name} />
-        <DetailsEntry label={tx("labels.model")} value={data.model} />
-        <DetailsEntry label={tx("labels.status")} value={data.status} />
-        <DetailsEntry label={tx("labels.createdOn")} value={data.created_on} />
-        <DetailsEntry label={tx("labels.updatedOn")} value={data.updated_on} />
+        <DetailsEntry
+          label={tx("labels.model")}
+          value={displayModelName(data.model_codename)}
+        />
+        <DetailsEntry
+          label={tx("labels.status")}
+          value={displayStatus(data.status)}
+        />
+        <DetailsEntry
+          label={tx("labels.createdOn")}
+          value={displayDate(
+            data.created_at,
+            "inferences.list.datagrid.dateFormat"
+          )}
+        />
+        <DetailsEntry
+          label={tx("labels.updatedOn")}
+          value={displayDate(
+            data.updated_at,
+            "inferences.list.datagrid.dateFormat"
+          )}
+        />
       </Stack>
     </Stack>
   );
@@ -86,26 +108,14 @@ const Preview = ({ data }) => {
   );
 };
 
-const manageErrorsFromQuery = (t, error, enqueueSnackbar) => {
-  if (error.response) {
-    enqueueSnackbar(error.response.data.detail, { variant: "error" });
-  } else if (error.request) {
-    enqueueSnackbar(t("errors.network.default"), { variant: "error" });
-  } else {
-    enqueueSnackbar(t("errors.unknown.default"), { variant: "error" });
-  }
-};
-
 const InferenceDetailsPage = () => {
   const { id } = useParams();
-  const { t } = useTranslation();
+  const { notifyError } = useNotification();
 
   const results = useQuery({
     queryKey: ["inferences", id],
     queryFn: () => Api.retrieveInference(id),
-    onError: (error) => {
-      manageErrorsFromQuery(t, error, enqueueSnackbar);
-    },
+    onError: (error) => notifyError(error),
   });
 
   if (results.isSuccess)

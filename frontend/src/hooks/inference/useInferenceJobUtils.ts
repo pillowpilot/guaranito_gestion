@@ -30,7 +30,22 @@ const useInferenceJobUtils = () => {
     }
   };
 
-  return { displayModelName, displayStatus };
+  const displayDate = (date: string, translationKey: string) => {
+    return t(translationKey, {
+      val: new Date(date),
+      formatParams: {
+        val: {
+          year: "numeric",
+          month: "short",
+          day: "2-digit",
+          hour: "numeric",
+          minute: "numeric",
+        },
+      },
+    });
+  };
+
+  return { displayModelName, displayStatus, displayDate };
 };
 
 export { useInferenceJobUtils };
