@@ -71,6 +71,7 @@ interface Property {
   id: number;
   name: string;
   company: number;
+  geodata: string;
   created_at: string;
   updated_at: string;
 }
@@ -85,6 +86,7 @@ interface Lot {
   id: number;
   name: string;
   property: number;
+  geodata: string;
   created_at: string;
   updated_at: string;
 }

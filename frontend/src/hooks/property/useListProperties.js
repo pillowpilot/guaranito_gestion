@@ -19,6 +19,7 @@ const useListProperties = () => {
         id: o.id,
         name: o.name,
         company: o.company,
+        geodata: o.geodata,
         created_on: o.created_at,
         updated_on: o.updated_at,
       }));
