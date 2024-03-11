@@ -1,54 +1,22 @@
-import { useState, useContext, useEffect } from "react";
-import {
-  Button,
-  Stack,
-  TextField,
-  InputAdornment,
-  IconButton,
-} from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { Stack } from "@mui/material";
 import { RequiredTextField } from "../../../components/fields/RequiredTextField";
-import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
-import AuthContext from "../../../contexts/AuthProvider";
 import { useUpdateUser } from "../../../hooks/user/useUpdateUser";
+import { PasswordField } from "../../../components/fields/PasswordField";
+import { BackButton } from "../../../components/buttons/BackButton";
+import { SubmitButton } from "../../../components/buttons/SubmitButton";
 
-const UserDataForm = ({ data, formMethods, mutation, errors = {} }) => {
-  const { t } = useTranslation();
+const UserDataForm = ({ data, formMethods }) => {
   const navigate = useNavigate();
-  // const { auth } = useContext(AuthContext);
-  
-  const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword(!showPassword);
-  
+
   const {
     register,
     handleSubmit,
-    reset,
     setError,
-    formState: { isSubmitSuccessful },
+    formState: { errors },
   } = formMethods;
 
   const { doUpdate } = useUpdateUser({ id: data.id, setError: setError });
-
-  // const onSubmit = (d) => {
-  //   mutation.mutate({
-  //     first_name: d.name,
-  //     last_name: d.lastname,
-  //     email: d.email,
-  //     password: d.password,
-  //     company: auth.company,
-  //   });
-  // };
-
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset({
-        password: "",
-      });
-    }
-  }, [isSubmitSuccessful, reset]);
 
   return (
     <form onSubmit={handleSubmit(doUpdate)}>
@@ -67,97 +35,42 @@ const UserDataForm = ({ data, formMethods, mutation, errors = {} }) => {
           errorMsg={errors.name?.message}
           defaultValue={data.first_name}
         />
-        {/* <TextField
-          label={t("users.details.labels.name")}
-          {...register("name", {
-            required: t("users.details.errors.requiredName"),
-          })}
-          defaultValue={data?.first_name}
-          error={!!errors.name}
-          helperText={errors.name?.message}
-        /> */}
-        <TextField
-          label={t("users.details.labels.lastname")}
-          {...register("lastname", {
-            required: t("users.details.errors.requiredLastname"),
-          })}
-          defaultValue={data?.last_name}
-          error={!!errors.lastname}
-          helperText={errors.lastname?.message}
+        <RequiredTextField
+          register={register}
+          name="lastname"
+          labelKey="users.details.labels.lastname"
+          requiredKey="users.details.errors.requiredLastname"
+          hasServerError={!!errors.lastname}
+          errorMsg={errors.lastname?.message}
+          defaultValue={data.last_name}
         />
-        <TextField
-          label={t("users.details.labels.email")}
-          {...register("email", {
-            required: t("users.details.errors.requiredEmail"),
-          })}
-          defaultValue={data?.email}
-          error={!!errors.email}
-          helperText={errors.email?.message}
+        <RequiredTextField
+          register={register}
+          name="email"
+          labelKey="users.details.labels.email"
+          requiredKey="users.details.errors.requiredEmail"
+          hasServerError={!!errors.email}
+          errorMsg={errors.email?.message}
+          defaultValue={data.email}
         />
-        <TextField
-          type={showPassword ? "input" : "password"}
-          label={t("users.details.labels.password")}
-          {...register("password", {
-            required: t("users.details.errors.requiredPassword"),
-          })}
-          error={!!errors.password}
-          helperText={errors.password?.message}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handleClickShowPassword} edge="end">
-                  {showPassword ? <Visibility /> : <VisibilityOff />}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
+        <PasswordField
+          register={register}
+          name="password"
+          labelKey="users.details.labels.password"
+          requiredKey="users.details.errors.requiredPassword"
+          hasServerError={!!errors.password}
+          errorMsg={errors.password?.message}
         />
         <Stack direction="row" justifyContent="center" gap={1}>
-          <Button variant="outlined" size="medium" onClick={() => navigate(-1)}>
-            {t("properties.details.goBackBtn")}
-          </Button>
-          <Button variant="contained" type="submit">
-            {t("users.details.saveBtn")}
-          </Button>
+          <BackButton
+            labelKey="properties.details.goBackBtn"
+            onClick={() => navigate(-1)}
+          />
+          <SubmitButton labelKey="users.details.saveBtn" />
         </Stack>
       </Stack>
     </form>
   );
-};
-
-UserDataForm.propTypes = {
-  /**
-   * Users data
-   */
-  data: PropTypes.shape({
-    id: PropTypes.number.isRequired,
-  }),
-  /**
-   * Form errors, if any
-   */
-  errors: PropTypes.shape({
-    name: PropTypes.shape({
-      message: PropTypes.string,
-    }),
-  }),
-  /**
-   * Mutation methods
-   */
-  mutation: PropTypes.shape({
-    mutate: PropTypes.func.isRequired,
-  }),
-  /**
-   * React Hoork Forms related functions
-   */
-  formMethods: PropTypes.shape({
-    register: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-    reset: PropTypes.func.isRequired,
-    setError: PropTypes.func.isRequired,
-    formState: {
-      isSubmitSuccessful: PropTypes.bool.isRequired,
-    },
-  }),
 };
 
 export { UserDataForm };
