@@ -38,6 +38,7 @@ class InferenceJobFactory(factory.django.DjangoModelFactory):
     lot = factory.SubFactory(LotFactory)
     latitude = factory.Faker('pyfloat')
     longitude = factory.Faker('pyfloat')
+    # TODO Add factories for all other fields
 
     class Meta:
         model = InferenceJob
