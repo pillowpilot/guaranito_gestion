@@ -48,7 +48,7 @@ class InferenceJob(models.Model):
     updated_at = models.DateTimeField(_("date updated"), auto_now=True)
 
     class Meta:
-        ordering = ["created_at"]
+        ordering = ["-created_at"]
 
     def __str__(self) -> str:
         return self.__repr__()
