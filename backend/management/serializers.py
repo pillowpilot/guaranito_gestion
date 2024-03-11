@@ -33,6 +33,7 @@ class LotSerializer(serializers.ModelSerializer):
     """
 
     parcel = serializers.PrimaryKeyRelatedField(queryset=Parcel.objects.all())
+    parcel_name = serializers.CharField(source="parcel.name", read_only=True)
     geodata = serializers.FileField(use_url=False)
 
     class Meta(object):
@@ -41,6 +42,7 @@ class LotSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "parcel",
+            "parcel_name",
             "geodata",
             "created_at",
             "updated_at",

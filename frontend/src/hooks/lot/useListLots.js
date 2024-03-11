@@ -15,7 +15,7 @@ const useListLots = () => {
       const clean = data.results.map((o) => ({
         id: o.id,
         name: o.name,
-        property: o.parcel,
+        property: o.parcel_name,
         geodata: o.geodata,
         created_on: o.created_at,
         updated_on: o.updated_at,
