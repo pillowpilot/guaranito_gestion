@@ -23,7 +23,7 @@ const UserDataForm = ({ formMethods, errors, mutation }) => {
       last_name: d.lastname,
       email: d.email,
       password: d.password,
-      company: auth.company.id,
+      company: auth.company,
     });
   };
 

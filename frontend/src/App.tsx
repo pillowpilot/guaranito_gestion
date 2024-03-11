@@ -180,21 +180,21 @@ function App() {
     }
   ]);
 
-  useEffect(() => {
-    const retrieveUserDataFromServer = async () => {
-      const data = (await Api.retrieveUser(auth.id)).data;
-      setAuth({
-        ...auth,
-        id: data.id,
-        role: data.is_company_manager ? "Manager" : "User",
-        company: {
-          id: data.company,
-        },
-      });
-    };
+  // useEffect(() => {
+  //   const retrieveUserDataFromServer = async () => {
+  //     const data = (await Api.retrieveUser(auth.id)).data;
+  //     setAuth({
+  //       ...auth,
+  //       id: data.id,
+  //       role: data.role,
+  //       company: {
+  //         id: data.company,
+  //       },
+  //     });
+  //   };
 
-    if (auth.isAuthenticated) retrieveUserDataFromServer();
-  }, [auth.isAuthenticated]);
+  //   if (auth.isAuthenticated) retrieveUserDataFromServer();
+  // }, [auth.isAuthenticated]);
 
   return (
     <ThemeProvider theme={theme}>

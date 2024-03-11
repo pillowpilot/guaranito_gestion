@@ -53,7 +53,7 @@ const NewPropertyPage = () => {
   const onSubmit = (d) => {
     mutation.mutate({
       name: d.name,
-      company: auth.company.id,
+      company: auth.company,
       // geodata: d.geodata,
     });
   };

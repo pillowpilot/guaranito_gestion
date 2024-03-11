@@ -46,7 +46,7 @@ const useUpdateUser = ({ id, setError }) => {
       last_name: formData.lastname,
       email: formData.email,
       password: formData.password,
-      company: auth.company.id,
+      company: auth.company,
     });
   };
 

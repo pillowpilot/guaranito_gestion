@@ -26,7 +26,7 @@ const PropertyForm = ({
     mutation.mutate({
       name: d.name,
       geodata: d.geodata,
-      company: auth.company?.id,
+      company: auth.company,
     });
   };
 

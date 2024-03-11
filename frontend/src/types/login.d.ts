@@ -5,6 +5,8 @@ export interface LoginData {
 
 export interface LoginResponse {
   id: number;
+  role: string;
+  company: number;
   refresh: string;
   access: string;
 }

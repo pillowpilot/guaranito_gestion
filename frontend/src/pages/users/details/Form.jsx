@@ -38,7 +38,7 @@ const UserDataForm = ({ data, formMethods, mutation, errors = {} }) => {
   //     last_name: d.lastname,
   //     email: d.email,
   //     password: d.password,
-  //     company: auth.company.id,
+  //     company: auth.company,
   //   });
   // };
 
