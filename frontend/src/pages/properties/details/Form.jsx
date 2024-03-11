@@ -1,13 +1,13 @@
 import { useContext } from "react";
-import { Button, Stack } from "@mui/material";
+import { Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import PropTypes from "prop-types";
 import AuthContext from "../../../contexts/AuthProvider";
 import { RequiredTextField } from "../../../components/fields/RequiredTextField";
 import { GeodataField } from "../../../components/fields/GeodataField";
 import { NoteIfGeodata } from "../../../components/fields/NoteIfGeodata";
-
+import { BackButton } from "../../../components/buttons/BackButton";
+import { SubmitButton } from "../../../components/buttons/SubmitButton";
 /**
  * Form for property update
  */
@@ -17,7 +17,6 @@ const PropertyForm = ({
   data = { name: "" },
   errors = {},
 }) => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
 
@@ -60,12 +59,11 @@ const PropertyForm = ({
         />
         <NoteIfGeodata geodata={data.geodata} />
         <Stack direction="row" justifyContent="center" gap={1}>
-          <Button variant="outlined" size="medium" onClick={() => navigate(-1)}>
-            {t("properties.details.goBackBtn")}
-          </Button>
-          <Button type="submit" variant="contained">
-            {t("properties.details.saveBtn")}
-          </Button>
+          <BackButton
+            labelKey="properties.details.goBackBtn"
+            onClick={() => navigate(-1)}
+          />
+          <SubmitButton labelKey="properties.details.saveBtn" />
         </Stack>
       </Stack>
     </form>
