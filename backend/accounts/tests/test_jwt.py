@@ -15,6 +15,8 @@ class TestJWT(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue("access" in response.data.keys())
         self.assertTrue("refresh" in response.data.keys())
+        self.assertTrue("id" in response.data.keys())
+        self.assertTrue("role" in response.data.keys())
 
     def test_token_creation_fail(self):
         c = CompanyFactory.create()
