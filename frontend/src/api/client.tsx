@@ -4,11 +4,10 @@ import { LoginData, LoginResponse } from "../types/login";
 
 export const LOCALSTORAGE_REFRESH_TOKEN = "refresh_token";
 export const LOCALSTORAGE_ACCESS_TOKEN = "access_token";
+// const baseURL = window.location.origin;
+export const baseURL = "http://localhost:8000/";
 
 const buildApiClient = () => {
-  // const baseURL = window.location.origin;
-  const baseURL = "http://localhost:8000/";
-
   const instance = axios.create({
     baseURL: baseURL,
   });
