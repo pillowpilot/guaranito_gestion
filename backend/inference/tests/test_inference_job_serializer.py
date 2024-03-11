@@ -20,6 +20,7 @@ class TestInferenceJobSerializer(TestCase):
             "lot_name",
             "model",
             "model_codename",
+            "status",
             "image",  # TODO Add testing
             "latitude",
             "longitude",
