@@ -2,14 +2,14 @@ import { useContext, useState } from "react";
 import { Box, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import AuthContext from "../../contexts/AuthProvider";
 import bgImage from "../../assets/orange_field_bg.png";
 import { LoginForm } from "./LoginForm";
+import { useNotification } from "../../hooks/useNotification";
 
 const LoginPage = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
+  const { notifyError } = useNotification();
   const { onLogin } = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -33,18 +33,7 @@ const LoginPage = () => {
       await onLogin(email, password);
       navigate("/dashboard");
     } catch (err) {
-      console.log(`Error while login`, err);
-      const responseCode = err.code;
-      switch (responseCode) {
-        case "ERR_NETWORK":
-          setErrorMsg(t("errors.network.default"));
-          break;
-        case "ERR_BAD_REQUEST":
-          setErrorMsg(t("errors.credentials.default"));
-          break;
-        default:
-          setErrorMsg(t("errors.unknown.default"));
-      }
+      notifyError(err);
     }
   };
 
