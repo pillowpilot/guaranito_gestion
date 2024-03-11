@@ -1,17 +1,16 @@
 import { useContext } from "react";
-import { Button, Stack } from "@mui/material";
-import { useTranslation } from "react-i18next";
+import { Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import PropTypes from "prop-types";
 import AuthContext from "../../../contexts/AuthProvider";
 import { RequiredTextField } from "../../../components/fields/RequiredTextField";
 import { PasswordField } from "../../../components/fields/PasswordField";
+import { BackButton } from "../../../components/buttons/BackButton";
+import { SubmitButton } from "../../../components/buttons/SubmitButton";
 
 /**
  * Renders user's form
  */
 const UserDataForm = ({ formMethods, errors, mutation }) => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const { auth } = useContext(AuthContext);
 
@@ -68,49 +67,15 @@ const UserDataForm = ({ formMethods, errors, mutation }) => {
           errorMsg={errors.password?.message}
         />
         <Stack direction="row" spacing={2}>
-          <Button variant="outlined" size="medium" onClick={() => navigate(-1)}>
-            {t("properties.create.goBackBtn")}
-          </Button>
-          <Button variant="contained" type="submit">
-            {t("users.create.saveBtn")}
-          </Button>
+          <BackButton
+            labelKey="properties.create.goBackBtn"
+            onClick={() => navigate(-1)}
+          />
+          <SubmitButton labelKey="users.create.saveBtn" />
         </Stack>
       </Stack>
     </form>
   );
-};
-
-UserDataForm.propTypes = {
-  /**
-   * Set of helper functions related to the form
-   */
-  formMethods: PropTypes.shape({
-    /**
-     * Helper function to register fields into RHF
-     */
-    register: PropTypes.func.isRequired,
-    handleSubmit: PropTypes.func.isRequired,
-  }),
-  mutation: PropTypes.shape({
-    mutate: PropTypes.func.isRequired,
-  }),
-  /**
-   * Object with form errors
-   */
-  errors: PropTypes.shape({
-    name: PropTypes.shape({
-      message: PropTypes.string.isRequired,
-    }),
-    lastname: PropTypes.shape({
-      message: PropTypes.string.isRequired,
-    }),
-    email: PropTypes.shape({
-      message: PropTypes.string.isRequired,
-    }),
-    password: PropTypes.shape({
-      message: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
 };
 
 export { UserDataForm };
