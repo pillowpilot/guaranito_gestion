@@ -14,12 +14,22 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         """Override get_token to append user id to token"""
         token = super().get_token(user)
         token["id"] = user.id
+        qs = user.groups.filter(name="company_manager")
+        if len(qs) > 0:
+            token["role"] = "company_manager"
+        else:
+            token["role"] = "company_user"
         return token
 
     def validate(self, attrs):
         """Add user id into response data after validation"""
         response_data = super().validate(attrs)
         response_data["id"] = self.user.id
+        qs = self.user.groups.filter(name="company_manager")
+        if len(qs) > 0:
+            response_data["role"] = "company_manager"
+        else:
+            response_data["role"] = "company_user"
         return response_data
 
 
