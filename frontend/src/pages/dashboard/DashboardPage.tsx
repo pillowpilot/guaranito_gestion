@@ -1,8 +1,5 @@
 import { Stack, Container } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
-import { useQuery } from "react-query";
-import { useTranslation } from "react-i18next";
-import { useSnackbar } from "notistack";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -15,11 +12,11 @@ import {
   Legend,
 } from "chart.js";
 import { Loading } from "./Loading";
-import { Api } from "../../api/client";
 import { Map } from "./Map";
 import { TotalCard } from "../../components/cards/TotalCard";
 import { LinesGraphCard } from "./LinesGraphCard";
 import { PieGraphCard } from "./PieGraphCard";
+import { useGetDashboardStatistics } from "../../hooks/useGetDashboardStatistics";
 
 ChartJS.register(
   CategoryScale,
@@ -32,54 +29,20 @@ ChartJS.register(
   Legend
 );
 
-const manageErrorsFromQuery = (t, error, enqueueSnackbar) => {
-  if (error.response) {
-    enqueueSnackbar(error.response.data.detail, { variant: "error" });
-  } else if (error.request) {
-    enqueueSnackbar(t("errors.network.default"), { variant: "error" });
-  } else {
-    enqueueSnackbar(t("errors.unknown.default"), { variant: "error" });
-  }
-};
-
 const DashboardPage = () => {
-  const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
-
-  const inferencesTotal = useQuery({
-    queryKey: ["inferences", "total"],
-    queryFn: Api.retrieveTotalNumberOfInferences,
-    onError: (error) => {
-      manageErrorsFromQuery(t, error, enqueueSnackbar);
-    },
-  });
-
-  // const lotsTotal = useQuery({
-  //   queryKey: ["lots", "total"],
-  //   queryFn: Api.retrieveTotalNumberOfLots,
-  //   onError: (error) => {
-  //     manageErrorsFromQuery(t, error, enqueueSnackbar);
-  //   },
-  // });
-
-  // const propertiesTotal = useQuery({
-  //   queryKey: ["properties", "total"],
-  //   queryFn: Api.retrieveTotalNumberOfProperties,
-  //   onError: (error) => {
-  //     manageErrorsFromQuery(t, error, enqueueSnackbar);
-  //   },
-  // });
+  const { inferencesTotal, lotsTotal, propertiesTotal } =
+    useGetDashboardStatistics();
 
   if (
-    inferencesTotal.isSuccess // &&
-    // lotsTotal.isSuccess &&
-    // propertiesTotal.isSuccess
+    inferencesTotal.isSuccess &&
+    lotsTotal.isSuccess &&
+    propertiesTotal.isSuccess
   ) {
     const dashboardData = {
       total: {
         inferences: inferencesTotal.data.data.total,
-        // lots: lotsTotal.data.data.total,
-        // properties: propertiesTotal.data.data.total,
+        lots: lotsTotal.data.data.total,
+        properties: propertiesTotal.data.data.total,
       },
     };
 
@@ -98,7 +61,7 @@ const DashboardPage = () => {
               <TotalCard
                 title="Total de Lotes"
                 subtitle="lorem ipsum"
-                content="LOTS"
+                content={dashboardData.total.lots}
               />
             </Grid>
 
@@ -114,7 +77,7 @@ const DashboardPage = () => {
               <TotalCard
                 title="Total de Fincas"
                 subtitle="lorem ipsum"
-                content="PROPERTIES"
+                content={dashboardData.total.properties}
               />
             </Grid>
           </Grid>
