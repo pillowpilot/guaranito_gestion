@@ -56,12 +56,7 @@ const useInferencesColumnsSpecs = (
   const modelColumn = {
     field: "model",
     headerName: t("inferences.list.datagrid.model"),
-  };
-
-  const taskColumn = {
-    field: "task_id",
-    headerName: t("inferences.list.datagrid.taskId"),
-    width: 150,
+    width: 250,
   };
 
   const coordsColumn = {
@@ -110,7 +105,6 @@ const useInferencesColumnsSpecs = (
     lotColumn,
     createOnColumn,
     modelColumn,
-    taskColumn,
     coordsColumn,
     statusColumn,
     actionsColumn,
