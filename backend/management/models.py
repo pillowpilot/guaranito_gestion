@@ -12,7 +12,7 @@ class Parcel(models.Model):
     name = models.CharField(max_length=100)
     # geodata = models.FileField(upload_to="geodata_parcels", null=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
-
+    geodata = models.FileField(upload_to="parcel_geodata", blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(_("date created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("date updated"), auto_now=True)
@@ -35,8 +35,7 @@ class Lot(models.Model):
 
     name = models.CharField(max_length=100)
     parcel = models.ForeignKey(Parcel, on_delete=models.CASCADE)
-    # geodata = models.FileField(upload_to="geodata_lots", blank=True, null=True)
-
+    geodata = models.FileField(upload_to="lots_geodata", blank=True, null=True)
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(_("date created"), auto_now_add=True)
     updated_at = models.DateTimeField(_("date updated"), auto_now=True)

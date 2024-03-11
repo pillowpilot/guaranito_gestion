@@ -18,6 +18,7 @@ class ParcelSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "company",
+            "geodata",
             "created_at",
             "updated_at",
         )
@@ -38,6 +39,7 @@ class LotSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "parcel",
+            "geodata",
             "created_at",
             "updated_at",
         )
