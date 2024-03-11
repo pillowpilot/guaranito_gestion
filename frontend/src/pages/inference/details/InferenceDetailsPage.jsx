@@ -3,7 +3,7 @@ import { Button, Paper, Stack, Box, Typography, Grid } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Image } from "mui-image";
-import { Api } from "../../../api/client";
+import { Api, baseURL } from "../../../api/client";
 import { useQuery } from "react-query";
 import { LoadingDetails, LoadingPreview } from "./Loading";
 import { useNotification } from "../../../hooks/useNotification";
@@ -53,8 +53,8 @@ const DetailsEntry = ({ label, value }) => {
 const Details = ({ data }) => {
   const { t } = useTranslation();
   const tx = (key) => t(`inferences.details.${key}`);
-  const { displayModelName, displayStatus, displayDate } = useInferenceJobUtils();
-  console.log("data", data);
+  const { displayModelName, displayStatus, displayDate } =
+    useInferenceJobUtils();
 
   return (
     <Stack gap={1}>
@@ -90,7 +90,7 @@ const Details = ({ data }) => {
 
 const Preview = ({ data }) => {
   const { t } = useTranslation();
-  const imageUrl = data.image_thumbnail;
+  const imageUrl = `${baseURL}/media/${data.image}`; // TODO extract into its own hook
   return (
     <Stack>
       <Typography variant="h5">
