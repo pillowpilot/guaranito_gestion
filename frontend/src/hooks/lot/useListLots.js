@@ -16,6 +16,7 @@ const useListLots = () => {
         id: o.id,
         name: o.name,
         property: o.parcel,
+        geodata: o.geodata,
         created_on: o.created_at,
         updated_on: o.updated_at,
       }));
