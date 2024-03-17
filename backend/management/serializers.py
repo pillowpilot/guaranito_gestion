@@ -34,7 +34,7 @@ class LotSerializer(serializers.ModelSerializer):
 
     parcel = serializers.PrimaryKeyRelatedField(queryset=Parcel.objects.all())
     parcel_name = serializers.CharField(source="parcel.name", read_only=True)
-    geodata = serializers.FileField(use_url=False)
+    geodata = serializers.FileField(use_url=False, required=False)
 
     class Meta(object):
         model = Lot

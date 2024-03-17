@@ -11,10 +11,14 @@ class TestLotSerializer(TestCase):
         l = LotFactory.create()
 
         serializer = LotSerializer(l)
-        self.assertEqual(len(serializer.data.keys()), 5)
+        
+        self.assertEqual(len(serializer.data.keys()), 7)
         self.assertTrue("id" in serializer.data.keys())
         self.assertTrue("name" in serializer.data.keys())
         self.assertTrue("parcel" in serializer.data.keys())
+        self.assertTrue("parcel_name" in serializer.data.keys())
+        self.assertEqual(serializer.data["parcel_name"], l.parcel.name)
+        self.assertTrue("geodata" in serializer.data.keys())
         self.assertTrue("created_at" in serializer.data.keys())
         self.assertTrue("updated_at" in serializer.data.keys())
 
