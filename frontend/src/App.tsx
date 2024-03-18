@@ -1,5 +1,6 @@
-import { useContext, useEffect } from "react";
+import { Suspense, lazy, useContext, useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { LinearProgress } from "@mui/material";
 import {
   createTheme,
   responsiveFontSizes,
@@ -15,22 +16,27 @@ import "./App.css";
 
 // Pages
 import CommonLayout from "./layouts/root/RootLayout";
-import DashboardPage from "./pages/dashboard/DashboardPage";
+const DashboardPage = lazy(() => import("./pages/dashboard/DashboardPage"));
 import LoginPage from "./pages/login/LoginPage";
 import NotFoundPage from "./pages/notfound/NotFound";
 import { DetailLot, ListLots, LotMap, CreateLot } from "./pages/lots";
 import { ListUsers, CreateUser, DetailsUser } from "./pages/users";
+
+const ListInferences = lazy(() =>
+  import("./pages/inference").then((m) => ({ default: m.ListInferences }))
+);
+const CreateInference = lazy(() =>
+  import("./pages/inference").then((m) => ({ default: m.CreateInference }))
+);
+const DetailInference = lazy(() =>
+  import("./pages/inference").then((m) => ({ default: m.DetailInference }))
+);
 import {
   ListProperties,
   CreateProperty,
   DetailProperty,
   PropertyMap,
 } from "./pages/properties";
-import {
-  DetailInference,
-  CreateInference,
-  ListInferences,
-} from "./pages/inference";
 
 const Logout = () => {
   const queryClient = useQueryClient();
@@ -71,7 +77,11 @@ function App() {
       children: [
         {
           path: "dashboard",
-          element: <DashboardPage />,
+          element: (
+            <Suspense fallback={<LinearProgress />}>
+              <DashboardPage />,
+            </Suspense>
+          ),
         },
         {
           path: "profile",
@@ -151,15 +161,27 @@ function App() {
           children: [
             {
               path: "",
-              element: <ListInferences />,
+              element: (
+                <Suspense fallback={<LinearProgress />}>
+                  <ListInferences />,
+                </Suspense>
+              ),
             },
             {
               path: ":id",
-              element: <DetailInference />,
+              element: (
+                <Suspense fallback={<LinearProgress />}>
+                  <DetailInference />
+                </Suspense>
+              ),
             },
             {
               path: "new",
-              element: <CreateInference />,
+              element: (
+                <Suspense fallback={<LinearProgress />}>
+                  <CreateInference />
+                </Suspense>
+              ),
             },
           ],
         },
@@ -176,7 +198,7 @@ function App() {
     {
       path: "*",
       element: <NotFoundPage />,
-    }
+    },
   ]);
 
   return (
