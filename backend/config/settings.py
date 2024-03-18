@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'accounts',
     'management',
     'inference',
+    'reporting',
     's3_storage',
 ]
 
