@@ -25,6 +25,7 @@ from drf_spectacular.views import (
 from accounts.urls import urlpatterns as account_urlpatterns
 from management.urls import urlpatterns as management_urlpatterns
 from inference.urls import urlpatterns as inference_urlpatterns
+from reporting.urls import urlpatterns as reporting_urlpatterns
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -44,3 +45,4 @@ urlpatterns = [
 urlpatterns.extend(account_urlpatterns)
 urlpatterns.extend(management_urlpatterns)
 urlpatterns.extend(inference_urlpatterns)
+urlpatterns.extend(reporting_urlpatterns)
