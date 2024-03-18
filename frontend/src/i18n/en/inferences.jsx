@@ -2,6 +2,7 @@ const t = {
   list: {
     header: "Inferences",
     newBtn: "New Inference",
+    reportBtn: "Reports",
     datagrid: {
       id: "ID",
       user: "User",

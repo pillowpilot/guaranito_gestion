@@ -6,9 +6,12 @@ import PropTypes from "prop-types";
 const Actions = () => {
   const { t } = useTranslation();
   return (
-    <Stack direction="row">
+    <Stack direction="row" gap={2}>
       <Button variant="contained" color="primary" component={Link} to={`new`}>
         {t("inferences.list.newBtn")}
+      </Button>
+      <Button variant="contained" color="primary" component={Link} to={`http://localhost:8000/api/reports`}>
+        {t("inferences.list.reportBtn")}
       </Button>
     </Stack>
   );
