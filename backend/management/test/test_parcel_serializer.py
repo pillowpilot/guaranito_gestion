@@ -12,10 +12,11 @@ class TestParcelSerializer(TestCase):
 
         # Test there is a one-to-one correspondence between
         # fields and keys
-        self.assertEqual(len(serializer.data.keys()), 5)
+        self.assertEqual(len(serializer.data.keys()), 6)
         self.assertTrue("id" in serializer.data.keys())
         self.assertTrue("name" in serializer.data.keys())
         self.assertTrue("company" in serializer.data.keys())
+        self.assertTrue("geodata" in serializer.data.keys())
         self.assertTrue("created_at" in serializer.data.keys())
         self.assertTrue("updated_at" in serializer.data.keys())
         self.assertEqual(p.company.id, serializer.data["company"])
@@ -29,6 +30,8 @@ class TestParcelSerializer(TestCase):
         }
 
         serializer = ParcelSerializer(data=native)
+        serializer.is_valid()
+        print(serializer.errors)
         self.assertTrue(serializer.is_valid())
         self.assertEqual(serializer.data["name"], "some name")
         self.assertEqual(serializer.data["company"], c.id)

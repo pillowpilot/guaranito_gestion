@@ -11,7 +11,7 @@ class ParcelSerializer(serializers.ModelSerializer):
     """
 
     company = serializers.PrimaryKeyRelatedField(queryset=Company.objects.all())
-    geodata = serializers.FileField(use_url=False)
+    geodata = serializers.FileField(use_url=False, required=False)
 
     class Meta(object):
         model = Parcel
