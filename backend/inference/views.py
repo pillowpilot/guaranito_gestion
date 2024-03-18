@@ -15,7 +15,10 @@ from inference.services.yolo_inference import (
     draw_yolo_boxes_on_image,
 )
 from inference.services.deepforest_inference import perform_tree_counting_inference
-from inference.services.post_inference import cleanup_after_deepforest_inference
+from inference.services.post_inference import (
+    cleanup_after_deepforest_inference,
+    generate_thumbnail,
+)
 
 
 class InferenceModelViewSet(viewsets.ReadOnlyModelViewSet):
@@ -68,7 +71,6 @@ class InferenceJobViewSet(
         job.save()
 
         image_filepath = job.image.path
-        print(image_filepath)
         coords: Coordinates = extract_coordinates(image_filepath)
         if coords:
             job.latitude = coords.latitude
@@ -96,9 +98,11 @@ class InferenceJobViewSet(
                 job.status = "failure"
 
         elif model.name == "trees":
-            chain = perform_tree_counting_inference.s(
-                image_filepath
-            ) | cleanup_after_deepforest_inference.s(job.id)
+            chain = (
+                perform_tree_counting_inference.s(image_filepath)
+                | cleanup_after_deepforest_inference.s(job.id)
+                | generate_thumbnail.s(job.id)
+            )
             chain.delay()
             job.status = "processing"
 
@@ -110,6 +114,7 @@ class InferenceJobViewSet(
             draw_yolo_boxes_on_image(
                 image_filepath, results, class_names.generate_class_name_list()
             )
+            generate_thumbnail(None, job.id)
 
     def perform_destroy(self, instance):
         """
