@@ -17,7 +17,7 @@ class Company(models.Model):
     updated_at = models.DateTimeField(_("date updated"), auto_now=True)
 
     def __str__(self):
-        return self.__repr__()
+        return f"{self.name}"
 
     def __repr__(self):
         return f"Company(name={self.name})"
@@ -84,4 +84,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         return f"User(first_name={self.first_name}, last_name={self.last_name}, email={self.email}, company={self.company})"
 
     def __str__(self):
-        return self.__repr__()
+        return f"{self.email}"
