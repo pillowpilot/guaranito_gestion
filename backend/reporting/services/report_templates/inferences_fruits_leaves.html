@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link
+      href="file:///home/federico/gestion_webapp/backend/reporting/report_templates/report.css"
+      rel="stylesheet"
+    />
+    <title>Report</title>
+    <meta name="description" content="Report example" />
+  </head>
+
+  <body>
+    <article id="cover">
+      <div>
+        <h1>Reporte de Inferencias</h1>
+        <span class="cover-caption">Febrero 2024</span>
+      </div>
+      <address>
+        Guaranito 
+        Av. Mcal. Lopez, 12345 
+        Asunción - Paraguay
+      </address>
+      <address>
+        contact@guaranito.com 
+        https://guaranito.com
+      </address>
+    </article>
+
+    <!-- <article id="chapter">
+      <h2 id="chapter-title">Finca: //parcel_name//</h2>
+    </article> -->
+
+    {% for image in images %}
+    <article class="inferences">
+      <h2 id="columns-title">Inferencia</h2>
+
+      <section class="thumbnail">
+        <img style="max-width: 512px;"
+          src="{{ image.path }}"
+        />
+      </section>
+      <section class="details">
+        <h4>Detalles</h4>
+        <dl>
+          <dt>Responsable</dt>
+          <dd>{{ image.user }}</dd>
+          <dt>Finca</dt>
+          <dd>{{ image.parcel }}</dd>
+          <dt>Lote</dt>
+          <dd>{{ image.lot }}</dd>
+          <dt>Coordenadas</dt>
+          <dd>{{ image.coords }}</dd>
+          <dt>Modelo</dt>
+          <dd>{{ image.model }}</dd>
+          <dt>Creado el</dt>
+          <dd>{{ image.created_on }}</dd>
+        </dl>
+      </section>
+    </article>
+    {% endfor %}
+  </body>
+</html>
