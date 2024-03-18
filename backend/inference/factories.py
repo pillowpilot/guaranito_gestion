@@ -36,8 +36,9 @@ class InferenceJobFactory(factory.django.DjangoModelFactory):
     user = factory.SubFactory(UserFactory)
     model = factory.SubFactory(InferenceModelFactory)
     lot = factory.SubFactory(LotFactory)
-    latitude = factory.Faker('pyfloat')
-    longitude = factory.Faker('pyfloat')
+    latitude = factory.Faker("pyfloat", min_value=-90, max_value=90)
+    longitude = factory.Faker("pyfloat", min_value=-180, max_value=180)
+    image = factory.django.ImageField(width=512, height=512, color="blue")
     # TODO Add factories for all other fields
 
     class Meta:

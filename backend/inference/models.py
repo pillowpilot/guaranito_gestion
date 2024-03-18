@@ -19,7 +19,7 @@ class InferenceModel(models.Model):
         ordering = ["created_at"]
 
     def __str__(self) -> str:
-        return self.__repr__()
+        return f"{self.name}"
 
     def __repr__(self) -> str:
         return f"InferenceModel(name={self.name}, display_name={self.display_name})"
