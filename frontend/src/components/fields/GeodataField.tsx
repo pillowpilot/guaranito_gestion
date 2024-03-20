@@ -1,8 +1,14 @@
-import { Controller } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import { MuiFileInput } from "mui-file-input";
 import { useTranslation } from "react-i18next";
 
-const GeodataField = ({ labelKey, requiredKey, control }) => {
+interface GeodataFieldProps {
+  labelKey: string;
+  requiredKey: string;
+  control: Control;
+}
+
+const GeodataField = ({ labelKey, requiredKey, control }: GeodataFieldProps) => {
   const { t } = useTranslation();
   return (
     <Controller

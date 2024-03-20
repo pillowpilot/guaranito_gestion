@@ -1,7 +1,11 @@
 import { Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 
-const NoteIfGeodata = ({ geodata }) => {
+interface NoteIfGeodataProps {
+  geodata: string;
+}
+
+const NoteIfGeodata = ({ geodata }: NoteIfGeodataProps) => {
   const { t } = useTranslation();
   if (geodata === null) return <></>;
   else {
@@ -9,7 +13,7 @@ const NoteIfGeodata = ({ geodata }) => {
     const filename = geodata.substring(startIndex);
     const message =
       t("properties.details.labels.geodataFound") + " (" + filename + ").";
-    return <Typography variant="body">{message}</Typography>;
+    return <Typography variant="body1">{message}</Typography>;
   }
 };
 
