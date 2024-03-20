@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError, InternalAxiosRequestConfig } from "axios";
 
 import { LoginData, LoginResponse } from "../types/login";
 
@@ -6,16 +6,22 @@ export const LOCALSTORAGE_REFRESH_TOKEN = "refresh_token";
 export const LOCALSTORAGE_ACCESS_TOKEN = "access_token";
 // const baseURL = window.location.origin;
 export const baseURL = import.meta.env.VITE_REACT_API_URL;
+console.log("baseUrl", baseURL);
 
 const buildApiClient = () => {
   const instance = axios.create({
     baseURL: baseURL,
   });
+  console.log("instance", instance);
 
   // Add Request Interceptors
   // onFullfilled: add JWT Access Token to the request
   // onRejected: do nothing (identity fn)
-  const addJWTAccessToken = (config) => {
+  const addJWTAccessToken = (
+    config: InternalAxiosRequestConfig
+  ): InternalAxiosRequestConfig => {
+    config.headers = config.headers ?? {};
+
     const accessToken = localStorage.getItem(LOCALSTORAGE_ACCESS_TOKEN);
     if (accessToken !== null)
       config.headers.Authorization = `Bearer ${accessToken}`;
@@ -28,8 +34,10 @@ const buildApiClient = () => {
   // Add Response Interceptors
   // onFullfilled: do nothing (identity fn)
   // onRejected: refresh JWT Access Token if 401 and resend the original request
-  const refreshJWTAccessToken = async (error) => {
-    const originalRequest = error.config;
+  const refreshJWTAccessToken = async (
+    error: AxiosError
+  ): Promise<AxiosError> => {
+    const originalRequest = error.config?? {headers: {Authorization: ''}};
 
     // If jwtRefreshToken does not exists, the user is unauthenticated (ie. in login page).
     // If we receive a 401 Unauthorized with an unauthenticated user, ignore.
@@ -134,26 +142,69 @@ interface ListInferenceJobsResponse {
   results: InferenceJob[];
 }
 
+interface CreateUserInput {
+  email: string;
+  password: string;
+  company: number;
+  first_name?: string;
+  last_name?: string;
+}
+
+interface UpdateUserInput {
+  email?: string;
+  password: string;
+  company: number;
+  first_name?: string;
+  last_name?: string;
+}
+
+interface CreatePropertyInput {
+  name: string;
+}
+
+interface UpdatePropertyInput {
+  name?: string;
+  geodata?: string; // TODO Fix?
+}
+
+interface CreateLotInput {
+  name: string;
+  parcel: number;
+}
+
+interface UpdateLotInput {
+  name?: string;
+  geodata?: string; // TODO Fix?
+}
+
+interface CreateInferenceJobInput {
+  user: number;
+  model: number;
+  lot: number;
+  image: string; // TODO Fix?
+}
+
 export const Api = {
   login: (data: LoginData) =>
     apiClient.post<LoginResponse>(`/api/token/`, data),
 
-  retrieveMediaFile: (filepath) => apiClient.get(`/media/${filepath}`),
+  retrieveMediaFile: (filepath: string) => apiClient.get(`/media/${filepath}`),
 
   listUsers: () => apiClient.get(`/api/users/`),
-  createUser: (data) => apiClient.post(`/api/users/`, data),
+  createUser: (data: CreateUserInput) => apiClient.post(`/api/users/`, data),
   retrieveUser: (id: number) => apiClient.get(`/api/users/${id}/`),
-  updateUser: (id: number, data) => apiClient.put(`/api/users/${id}/`, data),
+  updateUser: (id: number, data: UpdateUserInput) =>
+    apiClient.put(`/api/users/${id}/`, data),
 
   listProperties: () => apiClient.get<ListPropertiesResponse>(`/api/parcels/`),
-  createProperty: (data) =>
+  createProperty: (data: CreatePropertyInput) =>
     apiClient.post(`/api/parcels/`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     }),
   retrieveProperty: (id: number) => apiClient.get(`/api/parcels/${id}/`),
-  updateProperty: (id: number, data) =>
+  updateProperty: (id: number, data: UpdatePropertyInput) =>
     apiClient.put(`/api/parcels/${id}/`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -163,20 +214,20 @@ export const Api = {
   deleteProperty: (id: number) => apiClient.delete(`/api/parcels/${id}/`),
 
   listLots: () => apiClient.get<ListLotsResponse>(`/api/lots/`),
-  createLot: (data) =>
+  createLot: (data: CreateLotInput) =>
     apiClient.post(`/api/lots/`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     }),
   retrieveLot: (id: number) => apiClient.get(`/api/lots/${id}/`),
-  updateLot: (id: number, data) =>
+  updateLot: (id: number, data: UpdateLotInput) =>
     apiClient.put(`/api/lots/${id}/`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     }),
-  partiallyUpdateLot: (id: number, data) =>
+  partiallyUpdateLot: (id: number, data: UpdateLotInput) =>
     apiClient.patch(`/api/lots/${id}/`, data),
   deleteLot: (id: number) => apiClient.delete(`/api/lots/${id}/`),
   retrieveTotalNumberOfLots: () => apiClient.get(`/api/lots/total/`),
@@ -186,7 +237,7 @@ export const Api = {
 
   listInferences: () =>
     apiClient.get<ListInferenceJobsResponse>(`/api/inferencejobs/`),
-  createInference: (data) =>
+  createInference: (data: CreateInferenceJobInput) =>
     apiClient.post(`/api/inferencejobs/`, data, {
       headers: {
         "Content-Type": "multipart/form-data",
