@@ -3,6 +3,10 @@ import { useSnackbar } from "notistack";
 // eslint-disable-next-line no-unused-vars
 import { AxiosError } from "axios";
 
+interface ServerErrorType {
+  detail: string;
+}
+
 const useNotification = () => {
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
@@ -16,7 +20,7 @@ const useNotification = () => {
    *
    * @param {AxiosError} error
    */
-  const notifyError = (error) => {
+  const notifyError = (error: AxiosError<ServerErrorType>) => {
     if (error.response) {
       if (error.response.status >= 500) {
         enqueueSnackbar(t("errors.unknown.default"), { variant: "error" }); // TODO Add server error dedicated message
@@ -37,7 +41,7 @@ const useNotification = () => {
    *
    * @param {string} key i18n key to display. Eg: users.create.successMsg
    */
-  const notifySuccess = (key) => {
+  const notifySuccess = (key: string) => {
     enqueueSnackbar(t(key), { variant: "success" });
   };
 
