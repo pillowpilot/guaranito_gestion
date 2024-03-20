@@ -2,18 +2,23 @@ import { useTranslation } from "react-i18next";
 import { Chip, Typography, Stack } from "@mui/material";
 import Dms from "geodesy/dms";
 
-const CoordinateCell = ({ lat, lon }) => {
+interface CoordinateCellProps {
+  lat: number | undefined;
+  lon: number | undefined;
+}
+
+const CoordinateCell = ({ lat, lon }: CoordinateCellProps) => {
   const { t } = useTranslation();
   if (lat === undefined || lon === undefined)
     return (
-      <Typography variant="body">
+      <Typography variant="body1">
         {t("inferences.list.labels.noCoords")}
       </Typography>
     );
   return (
     <Stack>
-      <Typography variant="body">{Dms.toLat(lat, "dms", 2)}</Typography>
-      <Typography variant="body">{Dms.toLon(lon, "dms", 2)}</Typography>
+      <Typography variant="body1">{Dms.toLat(lat, "dms", 2)}</Typography>
+      <Typography variant="body1">{Dms.toLon(lon, "dms", 2)}</Typography>
     </Stack>
   );
 };
@@ -62,11 +67,16 @@ const StatusCell = ({ status }: StatusCellProps) => {
   );
 };
 
-const DateCell = ({ date, translationKey }) => {
+interface DateCellProps {
+  date: string;
+  translationKey: string;
+}
+
+const DateCell = ({ date, translationKey }: DateCellProps) => {
   const { t } = useTranslation();
 
   return (
-    <Typography variant="body">
+    <Typography variant="body1">
       {t(translationKey, {
         val: new Date(date),
         formatParams: {
