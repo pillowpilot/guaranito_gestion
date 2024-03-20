@@ -1,35 +1,25 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Card, CardContent, CardHeader } from "@mui/material";
 import { useQueries, useQuery } from "react-query";
-import { useSnackbar } from "notistack";
 
 import bbox from "@turf/bbox";
 import * as L from "leaflet";
-import { MapContainer, TileLayer, Popup, GeoJSON } from "react-leaflet";
+import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { Api } from "../../api/client";
-import { useTranslation } from "react-i18next";
+import { useNotification } from "../../hooks/useNotification";
+import { AxiosError } from "axios";
+import type { FeatureCollection } from 'geojson';
 
 const LoadingMap = () => {
   return <span>Loading...</span>;
 };
 
-const manageErrorsFromQuery = (t, error, enqueueSnackbar) => {
-  if (error.response) {
-    enqueueSnackbar(error.response.data.detail, { variant: "error" });
-  } else if (error.request) {
-    enqueueSnackbar(t("errors.network.default"), { variant: "error" });
-  } else {
-    enqueueSnackbar(t("errors.unknown.default"), { variant: "error" });
-  }
-};
-
 const Map = () => {
-  const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
+  const { notifyError } = useNotification();
 
   const listLots = useQuery({
     queryKey: ["lots"],
@@ -38,18 +28,14 @@ const Map = () => {
       const results = data.data.results;
       return results.filter((lot) => lot.geodata);
     },
-    onError: (error) => {
-      manageErrorsFromQuery(t, error, enqueueSnackbar);
-    },
+    onError: (error) => notifyError(error),
   });
 
   const geodataQueries = useQueries(
     listLots.data?.map((lot) => ({
       queryKey: ["lots", lot.id, "geodata"],
-      queryFn: () => Api.retrieveMediaFile(lot.geodata),
-      onError: (error) => {
-        manageErrorsFromQuery(t, error, enqueueSnackbar);
-      },
+      queryFn: () => Api.retrieveMediaFile(lot.geodata?? ''),
+      onError: (error: AxiosError) => notifyError(error),
       enabled: !!listLots.isSuccess,
     })) ?? []
   );
@@ -66,10 +52,10 @@ const Map = () => {
 
   if (listLots.isSuccess && geodataQueries.every((q) => q.isSuccess)) {
     const features = geodataQueries
-      .map((q) => q.data.data.features)
+      .map((q) => q.data?.data.features)
       .reduce((acc, cur) => [...acc, ...cur], []);
 
-    const featureCollection = {
+    const featureCollection: FeatureCollection = {
       type: "FeatureCollection",
       features: features,
     };
@@ -91,7 +77,10 @@ const Map = () => {
             "linear-gradient(90deg, #1976CD 4px, transparent 5px, transparent)",
         }}
       >
-        <CardHeader title="Total de Geodata" subheader="Union de la geolocalización de todos los lotes" />
+        <CardHeader
+          title="Total de Geodata"
+          subheader="Union de la geolocalización de todos los lotes"
+        />
         <CardContent>
           <MapContainer
             bounds={mapBounds}
@@ -106,7 +95,7 @@ const Map = () => {
             </GeoJSON>
 
             <TileLayer
-              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
           </MapContainer>
