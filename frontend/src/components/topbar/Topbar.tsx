@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, MouseEventHandler } from "react";
 import {
   Box,
   Container,
@@ -18,8 +18,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { Logout } from "@mui/icons-material";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { LanguageOptions } from "./LanguageOptions";
-import AuthContext from "../../contexts/AuthProvider";
+import { LanguageOptions } from "./LanguageOptions.tsx";
+import AuthContext, { ContextState } from "../../contexts/AuthProvider.tsx";
 
 const pages = [
   {
@@ -52,9 +52,11 @@ const pages = [
 const AvatarButton = ({ src = "" }) => {
   const { t } = useTranslation();
 
-  const [anchorElement, setAnchorElement] = useState(null);
+  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
 
-  const handleOpenAccountMenu = (event) => {
+  const handleOpenAccountMenu: MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
     setAnchorElement(event.currentTarget);
   };
 
@@ -108,7 +110,8 @@ const AvatarButton = ({ src = "" }) => {
 
 const DesktopTopBarContent = () => {
   const { t } = useTranslation();
-  const { auth } = useContext(AuthContext);
+  // @ts-expect-error TODO Add proper typing
+  const { auth } = useContext<ContextState>(AuthContext);
   const { role } = auth;
 
   const pagesToRender = pages.filter((page) =>
@@ -159,11 +162,12 @@ const DesktopTopBarContent = () => {
 
 const MobileTopBarContent = () => {
   const { t } = useTranslation();
-  const { auth } = useContext(AuthContext);
+  // @ts-expect-error TODO Add proper typing
+  const { auth } = useContext<ContextState>(AuthContext);
   const { role } = auth;
-  const [anchorElement, setAnchorElement] = useState(null);
+  const [anchorElement, setAnchorElement] = useState<HTMLElement | null>(null);
 
-  const handleOpenNavMenu = (event) => {
+  const handleOpenNavMenu: MouseEventHandler<HTMLButtonElement> = (event) => {
     setAnchorElement(event.currentTarget);
   };
 

@@ -6,10 +6,12 @@ import AuthContext from "../../contexts/AuthProvider";
 import bgImage from "../../assets/orange_field_bg.png";
 import { LoginForm } from "./LoginForm";
 import { useNotification } from "../../hooks/useNotification";
+import { isAxiosError } from "axios";
 
 const LoginPage = () => {
   const navigate = useNavigate();
   const { notifyError } = useNotification();
+  // @ts-expect-error TODO Add proper typing
   const { onLogin } = useContext(AuthContext);
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -23,7 +25,7 @@ const LoginPage = () => {
     },
   });
 
-  const onSubmitHandler = async (data) => {
+  const onSubmitHandler = async (data: {loginEmail: string, loginPassword: string}) => {
     setErrorMsg("");
 
     const email = data.loginEmail;
@@ -33,7 +35,8 @@ const LoginPage = () => {
       await onLogin(email, password);
       navigate("/dashboard");
     } catch (err) {
-      notifyError(err);
+      if (isAxiosError(err))
+        notifyError(err);
     }
   };
 

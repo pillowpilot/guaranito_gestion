@@ -2,9 +2,30 @@ import { Box, Typography, Stack, Alert } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { LoginButton } from "../../components/buttons/LoginButton";
 import { PasswordField } from "../../components/fields/PasswordField";
-import { RequiredTextField } from "../../components/fields/RequiredTextField";
+import { RequiredTextField } from "../../components/fields/RequiredTextField.tsx";
+import {
+  SubmitHandler,
+  UseFormHandleSubmit,
+  UseFormRegister,
+} from "react-hook-form";
 
-export const LoginForm = ({ errorMsg, onSubmitHandler, register, handleSubmit }) => {
+interface LoginData {
+  loginEmail: string;
+  loginPassword: string;
+}
+interface LoginFormProps {
+  register: UseFormRegister<LoginData>;
+  errorMsg: string;
+  onSubmitHandler: SubmitHandler<LoginData>;
+  handleSubmit: UseFormHandleSubmit<LoginData>;
+}
+
+export const LoginForm = ({
+  errorMsg,
+  onSubmitHandler,
+  register,
+  handleSubmit,
+}: LoginFormProps) => {
   const { t } = useTranslation();
 
   return (
@@ -22,12 +43,16 @@ export const LoginForm = ({ errorMsg, onSubmitHandler, register, handleSubmit })
             name="loginEmail"
             labelKey="login.labels.email"
             requiredKey="login.errors.requiredEmail"
-            register={register} />
+            // @ts-expect-error TODO add proper typing
+            register={register}
+          />
           <PasswordField
             name="loginPassword"
             labelKey="login.labels.password"
             requiredKey="login.errors.requiredPassword"
-            register={register} />
+            // @ts-expect-error TODO add proper typing
+            register={register}
+          />
           <LoginButton tKey="login.loginBtn" />
           <Stack direction="column" gap={2} justifyContent="space-between">
             {errorMsg === "" ? (
