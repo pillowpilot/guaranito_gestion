@@ -41,6 +41,7 @@ const Map = () => {
   );
 
   useEffect(() => {
+    // @ts-expect-error TODO Add proper typing
     delete L.Icon.Default.prototype._getIconUrl;
 
     L.Icon.Default.mergeOptions({
