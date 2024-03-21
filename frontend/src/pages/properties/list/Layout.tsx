@@ -1,6 +1,7 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { ReactElement } from "react";
 
 const Actions = () => {
   const { t } = useTranslation();
@@ -28,7 +29,10 @@ const Actions = () => {
   );
 };
 
-const PageLayout = ({ children }) => {
+interface PageLayoutProps {
+  children: ReactElement;
+}
+const PageLayout = ({ children }: PageLayoutProps) => {
   const { t } = useTranslation();
 
   return (
