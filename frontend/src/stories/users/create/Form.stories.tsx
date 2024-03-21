@@ -1,3 +1,5 @@
+import { StoryFn } from "@storybook/react";
+// @ts-expect-error TODO 
 import { UserDataForm } from "../../../pages/users/create/Form";
 import { withRouter } from "storybook-addon-react-router-v6";
 
@@ -7,7 +9,7 @@ export default {
   tags: ["autodocs"],
   decorators: [
     withRouter,
-    (Story) => (
+    (Story: StoryFn) => (
       <div>
         <Story />
       </div>

@@ -1,3 +1,5 @@
+import { StoryFn } from "@storybook/react";
+// @ts-expect-error TODO 
 import { ListUsers } from "../../../pages/users/";
 import { withRouter } from "storybook-addon-react-router-v6";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -8,7 +10,7 @@ export default {
   tags: ["autodocs"],
   decorators: [
     withRouter,
-    (Story) => {
+    (Story: StoryFn) => {
       const queryClient = new QueryClient();
       return (
         <QueryClientProvider client={queryClient}>
