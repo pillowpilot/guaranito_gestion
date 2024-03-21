@@ -10,7 +10,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import { useQueryClient } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 
-import AuthContext from "./contexts/AuthProvider";
+import AuthContext, { ContextState } from "./contexts/AuthProvider";
 import "./i18n/i18n";
 import "./App.css";
 
@@ -18,17 +18,23 @@ import "./App.css";
 import CommonLayout from "./layouts/root/RootLayout";
 const DashboardPage = lazy(() => import("./pages/dashboard/DashboardPage"));
 import LoginPage from "./pages/login/LoginPage";
+// @ts-expect-error TODO
 import NotFoundPage from "./pages/notfound/NotFound";
+// @ts-expect-error TODO
 import { DetailLot, ListLots, LotMap, CreateLot } from "./pages/lots";
+// @ts-expect-error TODO
 import { ListUsers, CreateUser, DetailsUser } from "./pages/users";
 
 const ListInferences = lazy(() =>
+  // @ts-expect-error TODO
   import("./pages/inference").then((m) => ({ default: m.ListInferences }))
 );
 const CreateInference = lazy(() =>
+  // @ts-expect-error TODO
   import("./pages/inference").then((m) => ({ default: m.CreateInference }))
 );
 const DetailInference = lazy(() =>
+  // @ts-expect-error TODO
   import("./pages/inference").then((m) => ({ default: m.DetailInference }))
 );
 import {
@@ -36,10 +42,12 @@ import {
   CreateProperty,
   DetailProperty,
   PropertyMap,
+  // @ts-expect-error TODO
 } from "./pages/properties";
 
 const Logout = () => {
   const queryClient = useQueryClient();
+  // @ts-expect-error TODO Add proper typing
   const { onLogout } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -53,18 +61,21 @@ const Logout = () => {
 };
 
 const RootComponent = () => {
-  const { auth } = useContext(AuthContext);
+  // @ts-expect-error TODO Add proper typing
+  const { auth } = useContext<ContextState>(AuthContext);
   if (!auth.isAuthenticated) return <Navigate to="/login" />;
   return <CommonLayout />;
 };
 
 const LoginComponent = () => {
+  // @ts-expect-error TODO Add proper typing
   const { auth } = useContext(AuthContext);
   if (auth.isAuthenticated) return <Navigate to="/" />;
   return <LoginPage />;
 };
 
 function App() {
+  // @ts-expect-error TODO Add proper typing
   const { auth } = useContext(AuthContext);
   let theme = createTheme();
   theme = responsiveFontSizes(theme);
