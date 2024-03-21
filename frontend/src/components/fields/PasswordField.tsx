@@ -9,8 +9,8 @@ interface PasswordFieldProps {
   name: string;
   labelKey: string;
   requiredKey: string;
-  hasServerError: boolean;
-  errorMsg: string;
+  hasServerError?: boolean;
+  errorMsg?: string;
 }
 
 /**

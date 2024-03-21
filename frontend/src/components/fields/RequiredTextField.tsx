@@ -7,9 +7,9 @@ interface RequiredTextFieldProps {
   name: string;
   labelKey: string;
   requiredKey: string;
-  hasServerError: boolean;
-  errorMsg: string;
-  defaultValue: string;
+  hasServerError?: boolean;
+  errorMsg?: string;
+  defaultValue?: string;
 }
 
 /**
