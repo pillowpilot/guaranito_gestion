@@ -1,7 +1,8 @@
 import { useQuery } from "react-query";
-import { useNotification } from "../useNotification";
+import { useNotification, ServerErrorType } from "../useNotification";
 import { Api } from "../../api/client";
 import { useInferenceJobUtils } from "./useInferenceJobUtils";
+import { AxiosError } from "axios";
 
 const LIST_INFERENCE_QK = ["inferences"];
 
@@ -34,7 +35,7 @@ const useListInferences = () => {
       }));
       return clean;
     },
-    onError: (error) => notifyError(error),
+    onError: (error: AxiosError<ServerErrorType>) => notifyError(error),
   });
 
   return listInferences;

@@ -10,7 +10,7 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import { Api } from "../../api/client";
-import { useNotification } from "../../hooks/useNotification";
+import { useNotification, ServerErrorType } from "../../hooks/useNotification";
 import { AxiosError } from "axios";
 import type { FeatureCollection } from 'geojson';
 
@@ -28,14 +28,14 @@ const Map = () => {
       const results = data.data.results;
       return results.filter((lot) => lot.geodata);
     },
-    onError: (error) => notifyError(error),
+    onError: (error: AxiosError<ServerErrorType>) => notifyError(error),
   });
 
   const geodataQueries = useQueries(
     listLots.data?.map((lot) => ({
       queryKey: ["lots", lot.id, "geodata"],
       queryFn: () => Api.retrieveMediaFile(lot.geodata?? ''),
-      onError: (error: AxiosError) => notifyError(error),
+      onError: (error: AxiosError<ServerErrorType>) => notifyError(error),
       enabled: !!listLots.isSuccess,
     })) ?? []
   );

@@ -6,7 +6,8 @@ import {
 } from "../api/client";
 
 const AuthContext = createContext({});
-interface ContextState {
+
+export interface ContextState {
   id: number | null;
   role: string | null;
   company: number | null;

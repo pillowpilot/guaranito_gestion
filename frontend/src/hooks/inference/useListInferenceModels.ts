@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
-import { useNotification } from "../useNotification";
+import { useNotification, ServerErrorType } from "../useNotification";
 import { Api } from "../../api/client";
+import { AxiosError } from "axios";
 
 const useListInferenceModels = () => {
   const { notifyError } = useNotification();
@@ -19,7 +20,7 @@ const useListInferenceModels = () => {
       }));
       return clean;
     },
-    onError: (error) => notifyError(error),
+    onError: (error: AxiosError<ServerErrorType>) => notifyError(error),
   });
 
   return listModels;
