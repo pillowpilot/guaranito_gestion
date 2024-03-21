@@ -1,12 +1,15 @@
 import { MenuItem, Typography, ListItemIcon, SvgIcon } from "@mui/material";
 import { US, PY } from "country-flag-icons/react/3x2";
 import { useTranslation } from "react-i18next";
-import PropTypes from "prop-types";
+
+interface LanguageOptionsProps {
+  handleCloseAccountMenu: () => void;
+}
 
 /**
  * Renders i18n menu items
  */
-const LanguageOptions = ({ handleCloseAccountMenu }) => {
+const LanguageOptions = ({ handleCloseAccountMenu }: LanguageOptionsProps) => {
   const { i18n } = useTranslation();
 
   const activeOptionStyle = {
@@ -51,17 +54,6 @@ const LanguageOptions = ({ handleCloseAccountMenu }) => {
       </MenuItem>
     </>
   );
-};
-
-LanguageOptions.propsTypes = {
-  /**
-   * Handler to close the menu
-   */
-  handleCloseAccountMenu: PropTypes.func,
-};
-
-LanguageOptions.defaultProps = {
-  handleCloseAccountMenu: () => {},
 };
 
 export { LanguageOptions };
