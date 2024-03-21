@@ -23,8 +23,12 @@ SECRET_KEY = 'django-insecure-((vu2-r(9e^t-4y79%24b8$c_6ni6-skn9qkd%207v!&bj(&_#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# CORS Configuration (required by the React frontend)
 ALLOWED_HOSTS = []
 CORS_ALLOW_ALL_ORIGINS = True
+
+# CSRF Configuration (required by the admin frontend)
+CSRF_TRUSTED_ORIGINS = ['http://52.44.75.147']
 
 # Custom user model
 AUTH_USER_MODEL = 'accounts.User'
